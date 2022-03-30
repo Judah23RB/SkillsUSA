@@ -17,6 +17,8 @@ public:
 	int wonMenu();
 	int lostMenu();
 
+	void loadBackground(sf::Sprite&);
+
 	bool isUnlocked(int);
 	void unlockLevel(int);
 
@@ -25,6 +27,8 @@ private:
 	bool unlocked[5] = {true,false,false,false,false};
 	sf::RenderWindow* screen = nullptr;
 	sf::Font font;
+	sf::Text title;
+	sf::Sprite* background = nullptr;
 
 	int inputs();
 	void startOptions();

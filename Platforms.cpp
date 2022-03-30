@@ -19,11 +19,13 @@ void Platforms::initplat()
 void Platforms::setPos(sf::Vector2f coords)
 {
 	platform.setPosition(coords);
+	x_cord = coords.x;
 }
 
 void Platforms::setPos(int x, int y)
 {
 	platform.setPosition(sf::Vector2f(x, y));
+	x_cord = x;
 }
 
 void Platforms::setSize(int length)
@@ -51,6 +53,12 @@ void Platforms::scroll(double speed)
 	platform.move(0, speed);
 }
 
+void Platforms::scroll_moving(double vert, double horiz)
+{
+	platform.move(0, vert);
+	//handle side scrolling
+}
+
 void Platforms::setTexture(const sf::Texture* textr)
 {
 	platform.setTexture(textr);
@@ -59,4 +67,14 @@ void Platforms::setTexture(const sf::Texture* textr)
 void Platforms::setTextureRect(const sf::IntRect rect)
 {
 	platform.setTextureRect(rect);
+}
+//1 is basic, 2 is fake, 3 is moving, 4 is end
+void Platforms::setType(int inp)
+{
+	type = inp;
+}
+
+int Platforms::getType()
+{
+	return type;
 }

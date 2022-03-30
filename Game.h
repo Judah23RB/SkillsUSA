@@ -31,6 +31,8 @@ private:
 	sf::RenderWindow window;
 	sf::Font font;
 	sf::Texture defaultplat;
+	sf::Texture background;
+	sf::Sprite backgroundImage;
 	sf::Text win, lose;
 	sf::Clock fallClock;
 	
@@ -40,13 +42,13 @@ private:
 	Level levels[5];
 	Level backUp[5];
 
+	
 	std::vector<const sf::Texture*> levelTexts;
 	
 	void initLevels();
 	void initWindow();
 	void initTextures();
-	//called by movement
-	void playerMovement();
+	
 	void falling(Level&);
 
 	bool won(Level&);

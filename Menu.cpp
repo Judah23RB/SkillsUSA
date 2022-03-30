@@ -11,6 +11,11 @@ void Menu::setWindow(sf::RenderWindow& window)
 {
 	screen = &window;
 }
+
+void Menu::loadBackground(sf::Sprite& image)
+{
+	background = &image;
+}
 Menu::~Menu()
 {
 
@@ -60,6 +65,7 @@ int Menu::inputs()
 	
 	while (input == 0)
 	{
+		screen->draw(*background);
 		for (auto i : buttons)
 			screen->draw(i);
 
@@ -90,15 +96,19 @@ void Menu::startOptions()
 	Button temp("", 0, font);
 	
 	temp = Button("Play", 1, font);
-	temp.setPosition(0, screen->getSize().y * .25);
+	temp.setPosition(100, screen->getSize().y * .25);
+	temp.setColor(sf::Color(128, 128, 128));
+	
 	buttons.push_back(temp);
 
 	temp = Button("Settings", 2, font);
-	temp.setPosition(0, screen->getSize().y * .5);
+	temp.setPosition(100, screen->getSize().y * .5);
+	temp.setColor(sf::Color(128, 128, 128));
 	buttons.push_back(temp);
 
 	temp = Button("Quit", 3, font);
-	temp.setPosition(0, screen->getSize().y * .75);
+	temp.setPosition(100, screen->getSize().y * .75);
+	temp.setColor(sf::Color(128, 128, 128));
 	buttons.push_back(temp);
 }
 

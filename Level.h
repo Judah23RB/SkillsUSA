@@ -29,7 +29,7 @@ public:
 	double getScrollSpeed(); // used for collision
 private:
 	int platNum = 0;
-	double scrollSpeed = -.05;
+	double scrollSpeed = -.1;
 	std::string levNum; // reading in data
 	
 	std::vector<int> xvals, yvals, length, platTypes;

@@ -44,7 +44,7 @@ void Level::loadLevel(std::string num)
 		}
 		fhandle.close();
 	}
-
+	/*
 	fileName = "LevelData/" + num + "/platTypes.txt";
 	fhandle.open(fileName);
 	if (fhandle.is_open())
@@ -55,6 +55,7 @@ void Level::loadLevel(std::string num)
 		}
 		fhandle.close();
 	}
+	*/
 	initLevel();
 	
 }
@@ -73,9 +74,11 @@ void Level::initLevel()
 	{
 		leveldata[x].setSize(length.at(x));
 		leveldata[x].setPos(xvals.at(x), yvals.at(x));
+		//leveldata[x].setType(platTypes.at(x));
 	}
 
-	endPlat = &leveldata[platNum - 1];
+	endPlat = &leveldata[platNum - 1]; //final platform is end
+	//endPlat->setType(4);
 }
 
 
@@ -95,8 +98,12 @@ void Level::drawLevel(sf::RenderWindow& w)
 
 bool Level::collision(sf::FloatRect p)
 {
+	//for (int x = 0; x < platNum; x++)
+		//if (p.intersects(leveldata[x].getPlatBounds()))
+			//return true;
+
 	for (int x = 0; x < platNum; x++)
-		if (p.intersects(leveldata[x].getPlatBounds()))
+		if (leveldata[x].getPlatBounds().contains(p.left, p.top + p.height) || leveldata[x].getPlatBounds().contains(p.left + p.width, p.top + p.height))
 			return true;
 	return false;
 }
@@ -136,7 +143,8 @@ void Level::loadTexture(const sf::Texture* textr)
 		leveldata[x].setTexture(textr);
 }
 
-//0 is platforms, 1 items, 2 enemies
+//0 is platforms, 1 items, 2 enemies in texts vector
+//1 is basic, 2 is fake, 3 is moving, 4 is end
 void Level::loadTexture(std::vector<const sf::Texture*> texts)
 {
 	for (int x = 0; x < platNum; x++)

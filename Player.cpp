@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <cmath>
 
 Player::Player()
 {
@@ -16,6 +17,18 @@ void Player::initPlayer()
 	sprite.setOrigin(sprite.getSize().x / 2, sprite.getSize().y / 2);
 	sprite.setFillColor(sf::Color::Blue);
 	sprite.setPosition(300,10);
+	initPhysics();
+}
+
+void Player::initPhysics()
+{
+	maxVelocity = .5;
+	maxfallVelocity = .2;
+	minVelocity = .05;
+	accel = 1.1;
+	drag = 0.6;
+	gravity = .05;
+	yMaxVelocity = .25;
 }
 
 const sf::RectangleShape& Player::getPlaySprite() const
@@ -32,19 +45,89 @@ sf::Vector2f Player::getPosition()
 	return sprite.getPosition();
 }
 
-void Player::moveLeft(int dist)
+
+void Player::moveInput(bool fallState, double scroll)
 {
-	sprite.move(-dist, 0);
+	falling = fallState;
+	scrollSpeed = scroll;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		if (getPosition().x > 0)
+			move(-1, 0);
+		
+		updatePhysics();
+
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		if (getPosition().x < 600)
+			move(1, 0);
+		
+		updatePhysics();
+	}
+}
+void Player::move(const int x, const int y)
+{
+	//acceleration
+	velocity.x += (x * accel);
+	if (!falling)
+	{
+		if (abs(velocity.x) > maxVelocity)
+		{
+			if (velocity.x < 0)
+				velocity.x = -1 * maxVelocity;
+			else
+				velocity.x = maxVelocity;
+		}
+	}
+	else
+	{
+		if (abs(velocity.x) > maxfallVelocity)
+		{
+			if (velocity.x < 0)
+				velocity.x = -1 * maxfallVelocity;
+			else
+				velocity.x = maxfallVelocity;
+		}
+		sprite.move(0, scrollSpeed);
+	}
+
 }
 
-void Player::moveRight(int dist)
+//bool ensures gravity doesnt work twice, as movement is handled in game
+void Player::updatePhysics()
 {
-	sprite.move(dist, 0);
+	if (velocity.y != -1)
+	{
+		//Gravity
+		velocity.y += 1.0 + gravity;
+
+		if (velocity.y > yMaxVelocity)
+			velocity.y = yMaxVelocity;
+	}
+
+
+
+	//decceleartion
+	velocity.x = velocity.x * drag;
+	velocity.y = velocity.y * drag;
+
+	if (abs(velocity.x) < minVelocity)
+		velocity.x = 0;
+
+	if (abs(velocity.y) < minVelocity)
+		velocity.y = 0;
+
+	sprite.move(velocity);
+	
+		
 }
 
-void Player::fall()
+
+void Player::resetYVelocity()
 {
-	sprite.move(0, .1);
+	velocity.y = -1;
 }
 
 void Player::setPosition(sf::Vector2f inp)
@@ -71,4 +154,7 @@ void Player::setHealth(int inp)
 {
 	health = inp;
 }
+
+
+
 

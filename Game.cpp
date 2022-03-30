@@ -18,7 +18,6 @@ Game::Game()
 	
 	menu.setWindow(window);
 	
-	
 	backUp[0] = levels[0];
 	
 	win.setFont(font);
@@ -48,6 +47,7 @@ Game::~Game()
 void Game::initWindow()
 {
 	window.create(sf::VideoMode(600, WINDOWSIZE), "Allegory", sf::Style::Close);
+	//window.setFramerateLimit(144);
 }
 
 void Game::initLevels()
@@ -61,6 +61,12 @@ void Game::initTextures()
 	if (!defaultplat.loadFromFile("Sprites/Platforms.jpg"))
 		std::cout << "Error loading platform texture" << std::endl;
 	
+	if (!background.loadFromFile("Sprites/Background.jpg"))
+		std::cout << "Error loading platform texture" << std::endl;
+
+	backgroundImage.setTexture(background);
+	menu.loadBackground(backgroundImage);
+
 	const sf::Texture* textureptr = &defaultplat;
 	levelTexts.push_back(textureptr);
 
@@ -98,40 +104,12 @@ void Game::runMainMenu()
 
 void Game::drawSprites(Level &level)
 {
+	window.draw(backgroundImage);
 	window.draw(player.getPlaySprite());
 	
 	level.drawLevel(window);
 }
 
-void Game::playerMovement()
-{
-	sf::Event event;
-
-	while (window.pollEvent(event))
-	{
-		int moveSpeed;
-		
-		if (fallState)
-			moveSpeed = 5;
-		else 
-			moveSpeed = 10;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			if (player.getPosition().x > 0)
-				player.moveLeft(moveSpeed);
-			started = true;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			if (player.getPosition().x < 600)
-				player.moveRight(moveSpeed);
-			started = true;
-		}
-		window.clear();
-	}
-	
-}
 //Player will fall as Level Scrolls until player loses
 //if player loses, displays LostMenu, allowing them to try again, return to Main, or Quit
 
@@ -140,68 +118,50 @@ void Game::falling(Level &level)
 	
 	if(!loss(level))
 	{
+		// if in bounds and not colliding, player falls as window scrolls
 		if (player.getPosition().y < WINDOWSIZE && !level.collision(player.getPlayerBounds()))
 		{
-			player.fall();
+			fallState = true;
+			player.updatePhysics(); //make player fall according to gravity
 			level.scrollLevel(window);
-			fallState= true;
+			
 		}
 		else
 		{
-			if (fallClock.getElapsedTime().asSeconds() > .5)
+			fallState = false;
+			//checks to see how long player has been falling
+			if (fallClock.getElapsedTime().asSeconds() > 1)
 				player.updateHealth(-1);
 			
 			std::cout << player.getHealth() << std::endl;
-			fallClock.restart();
 			
+			//stop gravity, update physics, have player collide according to scroll speed
+
+			player.resetYVelocity();
 			player.collide(level.getScrollSpeed());
 			level.scrollLevel(window);
-			fallState = false;
+			
+			fallClock.restart();
+			
 		}
-		window.clear();
-		window.draw(player.getPlaySprite());
-		level.drawLevel(window);
-		window.display();
 	}
-	else
-	{
-		window.clear();
-		window.display();
-		delay(200);
-		int choice = menu.lostMenu();
-		switch (choice)
-		{
-		case 1:
-			resetLevel();
-			playLevel(currentLevel);
-			break;
-		case 2:
-			window.clear();
-			window.display();
-			runMainMenu();
-			break;
-		case 3:
-			window.close();
-			break;
-		default:
-			break;
-		}
-		window.display();
-	}
-	
 }
 
 void Game::movement(Level &level)
 {
-
 	while (window.isOpen())
 	{
 		if (!won(level))
 		{
-			playerMovement();
 			falling(level);
+			player.moveInput(fallState, level.getScrollSpeed());
+			
+			window.clear();
+			window.draw(player.getPlaySprite());
+			level.drawLevel(window);
+			window.display();
 		}
-		else
+		else if (won(level))
 		{
 			window.clear();
 			window.display();
@@ -218,6 +178,31 @@ void Game::movement(Level &level)
 				break;
 			case 2:
 				window.clear();
+				runMainMenu();
+				break;
+			case 3:
+				window.close();
+				break;
+			default:
+				break;
+			}
+			window.display();
+		}
+		else if (loss(level))
+		{
+			window.clear();
+			window.display();
+			delay(200);
+			int choice = menu.lostMenu();
+			switch (choice)
+			{
+			case 1:
+				resetLevel();
+				playLevel(currentLevel);
+				break;
+			case 2:
+				window.clear();
+				window.display();
 				runMainMenu();
 				break;
 			case 3:
