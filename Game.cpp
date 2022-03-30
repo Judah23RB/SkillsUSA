@@ -107,7 +107,6 @@ void Game::drawSprites(Level &level)
 {
 	window.draw(backgroundImage);
 	window.draw(player.getPlaySprite());
-	
 	level.drawLevel(window);
 }
 
@@ -129,7 +128,7 @@ void Game::falling(Level &level)
 		{
 			fallState = false;
 			//checks to see how long player has been falling
-			if (fallClock.getElapsedTime().asSeconds() > 1)
+			if (fallClock.getElapsedTime().asSeconds() > 3)
 				player.updateHealth(-1);
 			
 			std::cout << player.getHealth() << std::endl;
@@ -152,12 +151,15 @@ void Game::movement(Level &level)
 {
 	while (window.isOpen())
 	{
+		
+		
 		if (!won(level)) //game loop
 		{
 			falling(level);
 			player.moveInput(fallState, level.getScrollSpeed());
 			
 			window.clear();
+			window.draw(backgroundImage);
 			window.draw(player.getPlaySprite());
 			level.drawLevel(window);
 			

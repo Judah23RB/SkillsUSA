@@ -51,11 +51,13 @@ void Player::moveInput(bool fallState, double scroll)
 	falling = fallState;
 	scrollSpeed = scroll;
 
+	currentState = animState::idle;
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		if (getPosition().x > 0)
 			move(-1, 0);
-		
+		currentState = animState::left;
 		updatePhysics();
 
 	}
@@ -63,7 +65,7 @@ void Player::moveInput(bool fallState, double scroll)
 	{
 		if (getPosition().x < 600)
 			move(1, 0);
-		
+		currentState = animState::right;
 		updatePhysics();
 	}
 }
@@ -120,9 +122,13 @@ void Player::updatePhysics()
 		velocity.y = 0;
 
 	sprite.move(velocity);
-	
-		
 }
+
+void Player::updateAnimations()
+{
+
+}
+
 
 
 void Player::resetYVelocity()
@@ -153,6 +159,21 @@ void Player::updateHealth(int inp)
 void Player::setHealth(int inp)
 {
 	health = inp;
+}
+
+const bool& Player::getAnimationState()
+{
+	bool state = animationSwitch;
+
+	if (animationSwitch)
+		animationSwitch = false;
+	return state;
+}
+
+void Player::resetAnimationTimer()
+{
+	animationTimer.restart();
+	animationSwitch = true;
 }
 
 
