@@ -27,6 +27,7 @@ private:
 	bool started = false;
 	bool fallState;
 	int currentLevel = 0;
+	
 	sf::RenderWindow window;
 	sf::Font font;
 	sf::Texture defaultplat;
@@ -37,9 +38,12 @@ private:
 	
 	Level levels[5];
 	Level backUp[5];
+
+	std::vector<const sf::Texture*> levelTexts;
 	
 	void initLevels();
 	void initWindow();
+	void initTextures();
 	//called by movement
 	void playerMovement();
 	void falling(Level&);

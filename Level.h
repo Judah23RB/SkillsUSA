@@ -16,6 +16,8 @@ public:
 	
 	void initLevel();
 	void loadTexture(const sf::Texture*);
+	void loadTexture(std::vector<const sf::Texture*>);
+	
 	int getPlatNum();
 	bool collision(sf::FloatRect);
 	void drawLevel(sf::RenderWindow&);
@@ -30,7 +32,7 @@ private:
 	double scrollSpeed = -.05;
 	std::string levNum; // reading in data
 	
-	std::vector<int> xvals, yvals, length;
+	std::vector<int> xvals, yvals, length, platTypes;
 	sf::Vector2f windowsize;
 	Platforms* leveldata = nullptr;
 	Platforms* endPlat = nullptr;

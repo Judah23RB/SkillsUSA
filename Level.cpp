@@ -44,6 +44,17 @@ void Level::loadLevel(std::string num)
 		}
 		fhandle.close();
 	}
+
+	fileName = "LevelData/" + num + "/platTypes.txt";
+	fhandle.open(fileName);
+	if (fhandle.is_open())
+	{
+		while (fhandle >> temp)
+		{
+			platTypes.push_back(temp);
+		}
+		fhandle.close();
+	}
 	initLevel();
 	
 }
@@ -123,6 +134,21 @@ void Level::loadTexture(const sf::Texture* textr)
 {
 	for (int x = 0; x < platNum; x++)
 		leveldata[x].setTexture(textr);
+}
+
+//0 is platforms, 1 items, 2 enemies
+void Level::loadTexture(std::vector<const sf::Texture*> texts)
+{
+	for (int x = 0; x < platNum; x++)
+		leveldata[x].setTexture(texts.at(0));
+	
+	sf::IntRect basePlat(135, 0, 80, 10);
+	
+	for (int x = 0; x < platNum; x++)
+	{
+		leveldata[x].setTextureRect(basePlat);
+	}
+		
 }
 
 double Level::getScrollSpeed()

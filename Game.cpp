@@ -8,6 +8,7 @@ Game::Game()
 {
 	initWindow();
 	initLevels();
+	initTextures();
 	
 	//for (int x = 0; x < 5; x++)
 		//backUp[x] = levels[x];
@@ -15,15 +16,9 @@ Game::Game()
 	if (!font.loadFromFile("ARCADECLASSIC.ttf"))
 		std::cout << "Error loading font" << std::endl;
 	
-	if (!defaultplat.loadFromFile("Sprites/Default.png"))
-		std::cout << "Error loading platform texture" << std::endl;
-
-
 	menu.setWindow(window);
 	
-	const sf::Texture* textureptr = &defaultplat;
 	
-	levels[0].loadTexture(textureptr);
 	backUp[0] = levels[0];
 	
 	win.setFont(font);
@@ -57,7 +52,21 @@ void Game::initWindow()
 
 void Game::initLevels()
 {
+	//will eventully initialize all levels in similar way
 	levels[0].loadLevel("1");
+}
+
+void Game::initTextures()
+{
+	if (!defaultplat.loadFromFile("Sprites/Platforms.jpg"))
+		std::cout << "Error loading platform texture" << std::endl;
+	
+	const sf::Texture* textureptr = &defaultplat;
+	levelTexts.push_back(textureptr);
+
+
+	//will eventually load all textures in same way
+	levels[0].loadTexture(levelTexts);
 }
 
 void Game::runMainMenu()
