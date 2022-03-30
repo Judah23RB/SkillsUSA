@@ -32,6 +32,8 @@ private:
 	sf::Font font;
 	sf::Texture defaultplat;
 	sf::Texture background;
+	sf::Image playerImage;
+	sf::Texture playerTexts;
 	sf::Sprite backgroundImage;
 	sf::Text win, lose;
 	sf::Clock fallClock;

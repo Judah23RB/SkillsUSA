@@ -55,7 +55,7 @@ void Level::loadLevel(std::string num)
 		}
 		fhandle.close();
 	}
-	std::cout << platTypes.size() << std::endl;
+	
 	initLevel();
 	
 }
@@ -95,6 +95,8 @@ void Level::drawLevel(sf::RenderWindow& w)
 		w.draw(leveldata[x].getPlatSprite());
 	}
 }
+
+
 //handles platform collision, special platform collision, item collision
 //reads in player bounding box
 //playerSprite necessary for updating player Position

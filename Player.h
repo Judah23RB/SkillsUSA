@@ -9,8 +9,11 @@ public:
 	Player();
 	~Player();
 	sf::Vector2f getPosition();
-	sf::RectangleShape& getPlaySprite();
+	sf::Sprite& getPlaySprite();
 	sf::FloatRect getPlayerBounds();
+	void setTexture(sf::Texture*);
+
+	void update(bool, bool);
 	
 	//physics
 	void moveInput(bool, double); //fallstate, scroll speed
@@ -21,8 +24,6 @@ public:
 	void collide(double);
 	
 	//Animations
-	const bool& getAnimationState();
-	void resetAnimationTimer();
 	void updateAnimations();
 
 	//health
@@ -35,15 +36,15 @@ private:
 	float accel, drag, maxVelocity, maxfallVelocity, minVelocity, gravity, yMaxVelocity;
 	
 	//animation
-	int currentState;
-	sf::Clock animationTimer;
+	int currentState = animState::idle;
 	sf::IntRect currentFrame;
-	bool animationSwitch;
+
+
 
 	bool falling;
 	double scrollSpeed;
 	
-	sf::RectangleShape sprite;
+	sf::Sprite sprite;
 	int health = 3;
 	
 	void initPlayer();

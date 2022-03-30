@@ -65,11 +65,21 @@ void Game::initTextures()
 	if (!background.loadFromFile("Sprites/Background.jpg"))
 		std::cout << "Error loading platform texture" << std::endl;
 
+	if (!playerImage.loadFromFile("Sprites/Player_Sprite_Sheet.png"))
+		std::cout << "Error loading Player Texture" << std::endl;
+
+	playerImage.createMaskFromColor(sf::Color(255, 255, 255), 0);
+
 	backgroundImage.setTexture(background);
 	menu.loadBackground(backgroundImage);
 
 	const sf::Texture* textureptr = &defaultplat;
+	sf::Texture* playerTextureptr = &playerTexts;
 	levelTexts.push_back(textureptr);
+
+	textureptr = &playerTexts;
+	playerTexts.loadFromImage(playerImage);
+	player.setTexture(playerTextureptr);
 
 
 	//will eventually load all textures in same way
@@ -131,7 +141,7 @@ void Game::falling(Level &level)
 			if (fallClock.getElapsedTime().asSeconds() > 3)
 				player.updateHealth(-1);
 			
-			std::cout << player.getHealth() << std::endl;
+			//std::cout << player.getHealth() << std::endl;
 			
 			//stop gravity, update physics, have player collide according to scroll speed
 
@@ -144,6 +154,8 @@ void Game::falling(Level &level)
 		}
 	}
 }
+
+
 //holds game loop, won and lost menu
 //winning results in the next level being made accessible
 //losing resets the current level
@@ -151,18 +163,13 @@ void Game::movement(Level &level)
 {
 	while (window.isOpen())
 	{
-		
-		
 		if (!won(level)) //game loop
 		{
 			falling(level);
 			player.moveInput(fallState, level.getScrollSpeed());
-			
+			player.updateAnimations();
 			window.clear();
-			window.draw(backgroundImage);
-			window.draw(player.getPlaySprite());
-			level.drawLevel(window);
-			
+			drawSprites(level);
 			window.display();
 		}
 		else if (won(level)) //won menu

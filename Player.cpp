@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <cmath>
+#include <iostream>
 
 Player::Player()
 {
@@ -13,10 +14,9 @@ Player::~Player()
 
 void Player::initPlayer()
 {
-	sprite.setSize(sf::Vector2f(30, 30));
-	sprite.setOrigin(sprite.getSize().x / 2, sprite.getSize().y / 2);
-	sprite.setFillColor(sf::Color::Blue);
+	sprite.setScale(1.25, 1.25);
 	sprite.setPosition(300,10);
+	currentState = animState::idle;
 	initPhysics();
 }
 
@@ -31,7 +31,7 @@ void Player::initPhysics()
 	yMaxVelocity = .5;
 }
 
-sf::RectangleShape& Player::getPlaySprite()
+sf::Sprite& Player::getPlaySprite()
 {
 	return sprite;
 }
@@ -58,16 +58,15 @@ void Player::moveInput(bool fallState, double scroll)
 		if (getPosition().x > 0)
 			move(-1, 0);
 		currentState = animState::left;
-		updatePhysics();
-
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		if (getPosition().x < 600)
 			move(1, 0);
 		currentState = animState::right;
-		updatePhysics();
 	}
+	updateAnimations();
+	updatePhysics();
 }
 void Player::move(const int x, const int y)
 {
@@ -126,7 +125,21 @@ void Player::updatePhysics()
 
 void Player::updateAnimations()
 {
-
+	if (currentState == idle)
+	{
+		currentFrame = sf::IntRect(0, 0, 18, 22);
+		sprite.setTextureRect(currentFrame);
+	}
+	if (currentState == right)
+	{
+		currentFrame = sf::IntRect(94, 0, 18, 22);
+		sprite.setTextureRect(currentFrame);
+	}
+	if (currentState == left)
+	{
+		currentFrame = sf::IntRect(19, 0, 20, 22);
+		sprite.setTextureRect(currentFrame);
+	}
 }
 
 
@@ -161,19 +174,13 @@ void Player::setHealth(int inp)
 	health = inp;
 }
 
-const bool& Player::getAnimationState()
-{
-	bool state = animationSwitch;
 
-	if (animationSwitch)
-		animationSwitch = false;
-	return state;
-}
 
-void Player::resetAnimationTimer()
+void Player::setTexture(sf::Texture* text)
 {
-	animationTimer.restart();
-	animationSwitch = true;
+	sprite.setTexture(*text);
+	currentFrame = sf::IntRect(0, 0, 18, 22);
+	sprite.setTextureRect(currentFrame);
 }
 
 
