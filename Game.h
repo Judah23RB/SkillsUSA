@@ -32,6 +32,7 @@ private:
 	sf::Font font;
 	sf::Texture defaultplat;
 	sf::Text win, lose;
+	sf::Clock fallClock;
 	
 	Menu menu;
 	Player player;

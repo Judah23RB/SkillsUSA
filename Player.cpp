@@ -57,3 +57,18 @@ void Player::collide(double scroll)
 	sprite.move(0, scroll);
 }
 
+int Player::getHealth()
+{
+	return health;
+}
+
+void Player::updateHealth(int inp)
+{
+	health += inp;
+}
+
+void Player::setHealth(int inp)
+{
+	health = inp;
+}
+

@@ -13,8 +13,12 @@ public:
 	void fall();
 	void setPosition(sf::Vector2f);
 	void collide(double);
+	int getHealth();
+	void updateHealth(int);//-1 damage, +1 health item
+	void setHealth(int); //used to reset at start of level
 private:
 	sf::RectangleShape sprite;
+	int health = 3;
 	void initPlayer();
 };
 

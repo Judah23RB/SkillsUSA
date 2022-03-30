@@ -137,6 +137,7 @@ void Game::playerMovement()
 
 void Game::falling(Level &level)
 {
+	
 	if(!loss(level))
 	{
 		if (player.getPosition().y < WINDOWSIZE && !level.collision(player.getPlayerBounds()))
@@ -147,6 +148,12 @@ void Game::falling(Level &level)
 		}
 		else
 		{
+			if (fallClock.getElapsedTime().asSeconds() > .5)
+				player.updateHealth(-1);
+			
+			std::cout << player.getHealth() << std::endl;
+			fallClock.restart();
+			
 			player.collide(level.getScrollSpeed());
 			level.scrollLevel(window);
 			fallState = false;
@@ -186,6 +193,7 @@ void Game::falling(Level &level)
 
 void Game::movement(Level &level)
 {
+
 	while (window.isOpen())
 	{
 		if (!won(level))
@@ -240,11 +248,10 @@ bool Game::won(Level &level)
 
 bool Game::loss(Level &level)
 {
-	if (player.getPosition().y < 0 || player.getPosition().y > level.getEndPlat()->getPos().y + 20)
+	if (player.getPosition().y < 0 || player.getPosition().y > level.getEndPlat()->getPos().y + 20 || player.getHealth() == 0)
 	{
 		window.draw(lose);
 		window.display();
-
 		return true;
 	}
 	
@@ -255,6 +262,7 @@ void Game::playLevel(int level)
 {
 	player.setPosition(sf::Vector2f(window.getSize().x / 2, 0));
 	window.clear();
+	fallClock.restart();
 	while (window.isOpen())
 	{
 		drawSprites(levels[0]);
