@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "Platforms.h"
+#include "Player.h"
 class Level
 {
 public:
@@ -19,7 +20,7 @@ public:
 	void loadTexture(std::vector<const sf::Texture*>);
 	
 	int getPlatNum();
-	bool collision(sf::FloatRect);
+	bool collision(sf::FloatRect, Player*); 
 	void drawLevel(sf::RenderWindow&);
 	
 	Platforms* getEndPlat();
@@ -29,7 +30,7 @@ public:
 	double getScrollSpeed(); // used for collision
 private:
 	int platNum = 0;
-	double scrollSpeed = -.1;
+	double scrollSpeed = -.25;
 	std::string levNum; // reading in data
 	
 	std::vector<int> xvals, yvals, length, platTypes;

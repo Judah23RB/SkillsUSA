@@ -18,6 +18,7 @@ Game::Game()
 	
 	menu.setWindow(window);
 	
+	//used for playing levels again, initialize backups after level has been full initialized
 	backUp[0] = levels[0];
 	
 	win.setFont(font);
@@ -47,7 +48,7 @@ Game::~Game()
 void Game::initWindow()
 {
 	window.create(sf::VideoMode(600, WINDOWSIZE), "Allegory", sf::Style::Close);
-	//window.setFramerateLimit(144);
+	window.setFramerateLimit(144);
 }
 
 void Game::initLevels()
@@ -111,15 +112,13 @@ void Game::drawSprites(Level &level)
 }
 
 //Player will fall as Level Scrolls until player loses
-//if player loses, displays LostMenu, allowing them to try again, return to Main, or Quit
-
 void Game::falling(Level &level)
 {
 	
 	if(!loss(level))
 	{
 		// if in bounds and not colliding, player falls as window scrolls
-		if (player.getPosition().y < WINDOWSIZE && !level.collision(player.getPlayerBounds()))
+		if (player.getPosition().y < WINDOWSIZE && !level.collision(player.getPlayerBounds(), &player))
 		{
 			fallState = true;
 			player.updatePhysics(); //make player fall according to gravity
@@ -146,12 +145,14 @@ void Game::falling(Level &level)
 		}
 	}
 }
-
+//holds game loop, won and lost menu
+//winning results in the next level being made accessible
+//losing resets the current level
 void Game::movement(Level &level)
 {
 	while (window.isOpen())
 	{
-		if (!won(level))
+		if (!won(level)) //game loop
 		{
 			falling(level);
 			player.moveInput(fallState, level.getScrollSpeed());
@@ -159,21 +160,23 @@ void Game::movement(Level &level)
 			window.clear();
 			window.draw(player.getPlaySprite());
 			level.drawLevel(window);
+			
 			window.display();
 		}
-		else if (won(level))
+		else if (won(level)) //won menu
 		{
 			window.clear();
 			window.display();
 			delay(200);
-			menu.unlockLevel(currentLevel + 1);
+			
+			menu.unlockLevel(currentLevel);
 			int choice = menu.wonMenu();
 			switch (choice)
 			{
 			case 1:
 				window.clear();
 				currentLevel++;
-				resetLevel();
+				resetLevel(currentLevel - 1);
 				playLevel(currentLevel);
 				break;
 			case 2:
@@ -188,7 +191,7 @@ void Game::movement(Level &level)
 			}
 			window.display();
 		}
-		else if (loss(level))
+		else if (loss(level)) //loss menu
 		{
 			window.clear();
 			window.display();
@@ -197,7 +200,7 @@ void Game::movement(Level &level)
 			switch (choice)
 			{
 			case 1:
-				resetLevel();
+				resetLevel(currentLevel);
 				playLevel(currentLevel);
 				break;
 			case 2:
@@ -256,10 +259,11 @@ void Game::playLevel(int level)
 	}
 }
 
-void Game::resetLevel()
+void Game::resetLevel(int inp)
 {
-	for (int x = 0; x < 5; x++)
-		levels[x] = backUp[x];
+	levels[inp - 1] = backUp[inp - 1];
+	player.setPosition(sf::Vector2f(300, 10));
+	fallClock.restart();
 }
 
 

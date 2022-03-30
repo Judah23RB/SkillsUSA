@@ -22,16 +22,16 @@ void Player::initPlayer()
 
 void Player::initPhysics()
 {
-	maxVelocity = .5;
-	maxfallVelocity = .2;
+	maxVelocity = 1;
+	maxfallVelocity = .5;
 	minVelocity = .05;
 	accel = 1.1;
-	drag = 0.6;
-	gravity = .05;
-	yMaxVelocity = .25;
+	drag = 0.8;
+	gravity = .1;
+	yMaxVelocity = .5;
 }
 
-const sf::RectangleShape& Player::getPlaySprite() const
+sf::RectangleShape& Player::getPlaySprite()
 {
 	return sprite;
 }

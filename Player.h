@@ -6,12 +6,11 @@ public:
 	Player();
 	~Player();
 	sf::Vector2f getPosition();
-	const sf::RectangleShape& getPlaySprite() const;
+	sf::RectangleShape& getPlaySprite();
 	sf::FloatRect getPlayerBounds();
 	
 	void moveInput(bool, double); //fallstate, scroll speed
 	
-	void fall();
 	void move(const int, const int);
 	void updatePhysics();
 	void setPosition(sf::Vector2f);

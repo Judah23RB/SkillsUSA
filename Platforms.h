@@ -23,7 +23,7 @@ public:
 
 private:
 	sf::RectangleShape platform;
-	int type; //1 is basic, 2 is fake, 3 is moving
+	int type; //1 is basic, 2 is fake, 3 moves left, 4 moves right, 5 is end
 	double x_cord; //used for moving platform as origin point
 	void initplat();
 

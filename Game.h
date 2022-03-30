@@ -26,7 +26,7 @@ private:
 	
 	bool started = false;
 	bool fallState;
-	int currentLevel = 0;
+	int currentLevel = 1;
 	
 	sf::RenderWindow window;
 	sf::Font font;
@@ -54,7 +54,7 @@ private:
 	bool won(Level&);
 	bool loss(Level&);
 
-	void resetLevel();
+	void resetLevel(int);
 
 	void delay(int);
 };

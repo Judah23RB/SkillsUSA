@@ -36,9 +36,5 @@ private:
 	void settingsOptions();
 	void wonOptions();
 	void lostOptions();
-
-
-
-
 };
 

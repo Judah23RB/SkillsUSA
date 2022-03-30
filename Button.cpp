@@ -17,7 +17,7 @@ Button::Button(const std::string labelText, const int initValue, sf::Font& f)
 	}
 
 	label.setFont(*font);
-	label.setCharacterSize(24);
+	label.setCharacterSize(36);
 
 	// Initialize value
 	value = initValue;
@@ -32,7 +32,7 @@ Button::Button(const std::string labelText, const int initValue, sf::Font& f)
 	float labelX = base.getPosition().x + ((base.getSize().x - labelSize.width) / 2);
 	float labelY = base.getPosition().y + ((base.getSize().y - labelSize.height) / 2);
 
-	label.setPosition(labelX, labelY);
+	label.setPosition(labelX, labelY - (.25 * base.getSize().y));
 }
 
 // Constructor for customizing sf::RectangleShape base
@@ -47,7 +47,7 @@ Button::Button(const std::string labelText, const int initValue, sf::Font& f, co
 	float labelX = base.getPosition().x + ((base.getSize().x - labelSize.width) / 2);
 	float labelY = base.getPosition().y + ((base.getSize().y - labelSize.height) / 2);
 
-	label.setPosition(labelX, labelY);
+	label.setPosition(labelX, labelY - (.25 * base.getSize().y));
 }
 
 Button::~Button()
