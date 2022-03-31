@@ -59,7 +59,7 @@ void Game::initLevels()
 
 void Game::initTextures()
 {
-	if (!defaultplat.loadFromFile("Sprites/Platforms.jpg"))
+	if (!platTextSheet.loadFromFile("Sprites/Platforms.jpg"))
 		std::cout << "Error loading platform texture" << std::endl;
 	
 	if (!background.loadFromFile("Sprites/Background.jpg"))
@@ -73,8 +73,9 @@ void Game::initTextures()
 	backgroundImage.setTexture(background);
 	menu.loadBackground(backgroundImage);
 
-	const sf::Texture* textureptr = &defaultplat;
+	const sf::Texture* textureptr = &platTextSheet;
 	sf::Texture* playerTextureptr = &playerTexts;
+	
 	levelTexts.push_back(textureptr);
 
 	textureptr = &playerTexts;

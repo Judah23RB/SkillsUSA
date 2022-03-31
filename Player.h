@@ -13,7 +13,6 @@ public:
 	sf::FloatRect getPlayerBounds();
 	void setTexture(sf::Texture*);
 
-	void update(bool, bool);
 	
 	//physics
 	void moveInput(bool, double); //fallstate, scroll speed

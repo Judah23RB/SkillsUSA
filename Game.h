@@ -30,7 +30,7 @@ private:
 	
 	sf::RenderWindow window;
 	sf::Font font;
-	sf::Texture defaultplat;
+	sf::Texture platTextSheet;
 	sf::Texture background;
 	sf::Image playerImage;
 	sf::Texture playerTexts;

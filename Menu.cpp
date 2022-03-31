@@ -1,10 +1,20 @@
 #include "Menu.h"
-
+#include <iostream>
 
 Menu::Menu()
 {
 	if (!font.loadFromFile("ARCADECLASSIC.ttf"))
 		throw "Error Loading Font\n";
+
+	title.setFont(font);
+	title.setCharacterSize(64);
+	title.setFillColor(sf::Color(128, 128, 128));
+	title.setOutlineThickness(5);
+	title.setOutlineColor(sf::Color::Black);
+
+	title.setPosition(160, 20);
+	title.setString("  DESCENT\n\t\tINTO\nDARKNESS");
+	title.setLetterSpacing(1.1);
 }
 
 void Menu::setWindow(sf::RenderWindow& window)
@@ -23,6 +33,9 @@ Menu::~Menu()
 
 int Menu::startMenu()
 {
+	
+	
+	mainMenu = true;
 	screen->clear();
 	startOptions();
 	return inputs();
@@ -30,6 +43,7 @@ int Menu::startMenu()
 
 int Menu::levelMenu()
 {
+	mainMenu = false;
 	screen->clear();
 	levelOptions();
 	return inputs();
@@ -45,6 +59,7 @@ int Menu::settingsMenu()
 
 int Menu::wonMenu()
 {
+	mainMenu = false;
 	screen->clear();
 	wonOptions();
 	return inputs();
@@ -52,6 +67,7 @@ int Menu::wonMenu()
 
 int Menu::lostMenu()
 {
+	mainMenu = false;
 	screen->clear();
 	lostOptions();
 	return inputs();
@@ -66,6 +82,10 @@ int Menu::inputs()
 	while (input == 0)
 	{
 		screen->draw(*background);
+		
+		if (mainMenu)
+			screen->draw(title);
+		
 		for (auto i : buttons)
 			screen->draw(i);
 

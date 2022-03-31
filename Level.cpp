@@ -64,6 +64,7 @@ void Level::loadLevel(std::string num)
 Level::~Level()
 {
 	delete[] leveldata;
+	leveldata = nullptr;
 }
 
 void Level::initLevel()

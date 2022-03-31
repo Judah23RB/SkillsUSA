@@ -9,6 +9,7 @@ Button::Button(const std::string labelText, const int initValue, sf::Font& f)
 	// Initialize label
 	label.setString(labelText);
 	label.setFillColor(sf::Color::Black);
+	label.setLetterSpacing(1.1);
 
 
 	if (!font->loadFromFile("ARCADECLASSIC.ttf"))

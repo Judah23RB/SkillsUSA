@@ -11,14 +11,22 @@ public:
 
 	void setWindow(sf::RenderWindow&);
 
+
+	//menus
 	int startMenu();
 	int levelMenu();
 	int settingsMenu();
 	int wonMenu();
 	int lostMenu();
-
+	
+	//textures
 	void loadBackground(sf::Sprite&);
-
+	
+	//Animations
+	void startAnimation();
+	void gameOverAnimation(bool); //won or lost
+	
+	//levels Menu
 	bool isUnlocked(int);
 	void unlockLevel(int);
 
@@ -29,6 +37,8 @@ private:
 	sf::Font font;
 	sf::Text title;
 	sf::Sprite* background = nullptr;
+
+	bool mainMenu = true; //used for displaying title
 
 	int inputs();
 	void startOptions();
