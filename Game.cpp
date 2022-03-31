@@ -103,7 +103,7 @@ void Game::runMainMenu()
 		//settings will allow turning off of music
 		break;
 	case 3:
-		//window.close();
+		window.close();
 		break;
 	default:
 		break;
@@ -123,34 +123,66 @@ void Game::drawSprites(Level &level)
 //Player will fall as Level Scrolls until player loses
 void Game::falling(Level &level)
 {
-	
+	int platType = 0;
 	if(!loss(level))
 	{
 		// if in bounds and not colliding, player falls as window scrolls
-		if (player.getPosition().y < WINDOWSIZE && !level.collision(player.getPlayerBounds(), &player))
+		if (player.getPosition().y < WINDOWSIZE && !level.collision(player.getPlayerBounds(), platType))
 		{
 			fallState = true;
 			player.updatePhysics(); //make player fall according to gravity
 			level.scrollLevel(window);
 			
 		}
-		else
+		else //if colliding, player scrolls with platforms according to platform type
 		{
 			fallState = false;
+			
 			//checks to see how long player has been falling
-			if (fallClock.getElapsedTime().asSeconds() > 3)
-				player.updateHealth(-1);
+			if (fallClock.getElapsedTime().asSeconds() > 2)
+				player.updateHealth(-1); //minor
+			else if (fallClock.getElapsedTime().asSeconds() > 4)
+				player.updateHealth(-2); //major
+			else if (fallClock.getElapsedTime().asSeconds() > 6)
+				player.updateHealth(-3); //autoKills
 			
 			//std::cout << player.getHealth() << std::endl;
 			
 			//stop gravity, update physics, have player collide according to scroll speed
-
-			player.resetYVelocity();
-			player.collide(level.getScrollSpeed());
+			switch (platType)
+			{
+			case 1:
+				player.resetYVelocity();
+				player.collide(level.getScrollSpeed());
+				fallClock.restart();
+				break;
+			case 2:
+				//continues to fall, platform animation handled in level?
+				break;
+			case 3:
+				player.resetYVelocity();
+				player.collide(level.getScrollSpeed());
+				player.move(-1, 0);
+				player.updatePhysics();
+				fallClock.restart();
+				break;
+			case 4:
+				player.resetYVelocity();
+				player.collide(level.getScrollSpeed());
+				player.move(1, 0);
+				player.updatePhysics();
+				fallClock.restart();
+				break;
+			case 5: //end plat, victory condition handled seperatly 
+				player.resetYVelocity();
+				player.collide(level.getScrollSpeed());
+				fallClock.restart();
+				break;
+			default:
+				break;
+			}
+			
 			level.scrollLevel(window);
-			
-			fallClock.restart();
-			
 		}
 	}
 }

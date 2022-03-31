@@ -19,7 +19,6 @@ public:
 	sf::RectangleShape getPlatSprite();
 	
 	void scroll(double);
-	void scroll_moving(double, double);
 
 private:
 	sf::RectangleShape platform;

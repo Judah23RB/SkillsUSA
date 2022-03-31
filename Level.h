@@ -20,7 +20,7 @@ public:
 	void loadTexture(std::vector<const sf::Texture*>);
 	
 	int getPlatNum();
-	bool collision(sf::FloatRect, Player*); 
+	bool collision(sf::FloatRect, int&); //passes in boundary box, storage int that is set to platform type 
 	void drawLevel(sf::RenderWindow&);
 	
 	Platforms* getEndPlat();

@@ -53,11 +53,7 @@ void Platforms::scroll(double speed)
 	platform.move(0, speed);
 }
 
-void Platforms::scroll_moving(double vert, double horiz)
-{
-	platform.move(0, vert);
-	//handle side scrolling
-}
+
 
 void Platforms::setTexture(const sf::Texture* textr)
 {

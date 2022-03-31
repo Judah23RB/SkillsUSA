@@ -98,9 +98,9 @@ void Level::drawLevel(sf::RenderWindow& w)
 
 
 //handles platform collision, special platform collision, item collision
-//reads in player bounding box
-//playerSprite necessary for updating player Position
-bool Level::collision(sf::FloatRect p, Player* player)
+//reads in player bounding box, int by reference to store plat type
+//if player is colliding with platform, return type of platform so collision can be handled in game
+bool Level::collision(sf::FloatRect p, int &platType)
 {
 	for (int x = 0; x < platNum; x++)
 	{
@@ -108,22 +108,45 @@ bool Level::collision(sf::FloatRect p, Player* player)
 		{
 		case 1: //default
 			if (leveldata[x].getPlatBounds().contains(p.left, p.top + p.height) || leveldata[x].getPlatBounds().contains(p.left + p.width, p.top + p.height))
+			{
+				platType = 1;
 				return true;
+			}
 			break;
 		case 2: //broken
-			//add that it changes texture
-			return false;
+			if (leveldata[x].getPlatBounds().contains(p.left, p.top + p.height) || leveldata[x].getPlatBounds().contains(p.left + p.width, p.top + p.height))
+			{
+				platType = 2;
+				//animate platform
+				return false;
+			}
 			break;
 		case 3: //tread left
-			//moves player to the left
+			if (leveldata[x].getPlatBounds().contains(p.left, p.top + p.height) || leveldata[x].getPlatBounds().contains(p.left + p.width, p.top + p.height))
+			{
+				platType = 3;
+				return true;
+			}
 			break;
 		case 4: //tread right
-			//moves player to the right
+			if (leveldata[x].getPlatBounds().contains(p.left, p.top + p.height) || leveldata[x].getPlatBounds().contains(p.left + p.width, p.top + p.height))
+			{
+				platType = 4;
+				return true;
+			}
+			break;
+		case 5: //end plat
+			if (leveldata[x].getPlatBounds().contains(p.left, p.top + p.height) || leveldata[x].getPlatBounds().contains(p.left + p.width, p.top + p.height))
+			{
+				platType = 5;
+				return true;
+			}
 			break;
 		default:
 			break;
 		}
 	}
+	platType = 0;
 	return false;
 }
 
