@@ -50,6 +50,10 @@ void Game::initLevels()
 {
 	//will eventully initialize all levels in similar way
 	levels[0].loadLevel("1");
+	levels[1].loadLevel("2");
+	levels[2].loadLevel("3");
+	levels[3].loadLevel("4");
+	levels[4].loadLevel("5");
 }
 
 void Game::initTextures()
@@ -154,7 +158,7 @@ void Game::runWonMenu()
 		currentLevel++;
 		choice = 0;
 		runMainMenu();
-		//resetLevel(currentLevel - 2); //0 in level data is level 1
+		resetLevel(currentLevel - 2); //0 in level data is level 1
 		//playLevel(currentLevel); //play level 2
 		break;
 	case 2:
@@ -276,6 +280,7 @@ void Game::movement(Level &level)
 			window.display();
 			delay(500);
 			runWonMenu();
+
 		}
 		else if (lostLevel) //loss menu
 		{
@@ -284,7 +289,6 @@ void Game::movement(Level &level)
 			window.display();
 			delay(500);
 			runLostMenu();
-			
 		}
 		
 	}
@@ -312,8 +316,8 @@ void Game::playLevel(int level)
 	fallClock.restart();
 	while (window.isOpen())
 	{
-		drawSprites(levels[0]);
-		movement(levels[0]);
+		drawSprites(levels[level]);
+		movement(levels[level]);
 		window.display();
 	}
 }

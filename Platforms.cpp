@@ -62,7 +62,7 @@ void Platforms::setTextureRect(const sf::IntRect rect)
 {
 	platform.setTextureRect(rect);
 }
-//1 is basic, 2 is fake, 3 is moving, 4 is end
+//1 is basic, 2 is fake, 3 moves left, 4 moves right, 5 is spikes, 6 is end
 void Platforms::setType(int inp)
 {
 	type = inp;

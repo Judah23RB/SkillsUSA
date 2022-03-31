@@ -22,7 +22,7 @@ public:
 
 private:
 	sf::RectangleShape platform;
-	int type; //1 is basic, 2 is fake, 3 moves left, 4 moves right, 5 is end
+	int type; //1 is basic, 2 is fake, 3 moves left, 4 moves right, 5 is spikes, 6 is end
 	
 	void initplat();
 
