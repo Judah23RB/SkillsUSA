@@ -14,7 +14,7 @@ Player::~Player()
 
 void Player::initPlayer()
 {
-	sprite.setScale(1.25, 1.25);
+	sprite.setScale(1.5, 1.5);
 	sprite.setPosition(300,10);
 	currentState = animState::idle;
 	initPhysics();

@@ -14,8 +14,9 @@ public:
 	~Level();
 	
 	void loadLevel(std::string); //reads in using folder name as string
-	
 	void initLevel();
+	void resetLevel(); //used after level is completed/failed
+
 	void loadTexture(const sf::Texture*);
 	void loadTexture(std::vector<const sf::Texture*>);
 	

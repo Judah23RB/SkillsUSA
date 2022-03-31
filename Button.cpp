@@ -51,6 +51,28 @@ Button::Button(const std::string labelText, const int initValue, sf::Font& f, co
 	label.setPosition(labelX, labelY - (.25 * base.getSize().y));
 }
 
+Button::Button(const std::string labelText, const int initValue, sf::Font& f, const int fontSize) : Button(labelText,initValue,f)
+{
+	label.setCharacterSize(fontSize);
+	
+	sf::FloatRect labelSize = label.getLocalBounds();
+	float labelX = base.getPosition().x + ((base.getSize().x - labelSize.width) / 2);
+	float labelY = base.getPosition().y + ((base.getSize().y - labelSize.height) / 2);
+
+	label.setPosition(labelX, labelY - (.25 * base.getSize().y));
+}
+
+Button::Button(const std::string labelText, const int initValue, sf::Font& f, const sf::RectangleShape initRect, const int fontSize) : Button(labelText, initValue, f, initRect)
+{
+	label.setCharacterSize(fontSize);
+
+	sf::FloatRect labelSize = label.getLocalBounds();
+	float labelX = base.getPosition().x + ((base.getSize().x - labelSize.width) / 2);
+	float labelY = base.getPosition().y + ((base.getSize().y - labelSize.height) / 2);
+
+	label.setPosition(labelX, labelY - (.33 * base.getSize().y));
+}
+
 Button::~Button()
 {
 

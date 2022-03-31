@@ -19,13 +19,11 @@ void Platforms::initplat()
 void Platforms::setPos(sf::Vector2f coords)
 {
 	platform.setPosition(coords);
-	x_cord = coords.x;
 }
 
 void Platforms::setPos(int x, int y)
 {
 	platform.setPosition(sf::Vector2f(x, y));
-	x_cord = x;
 }
 
 void Platforms::setSize(int length)
@@ -43,7 +41,7 @@ sf::FloatRect Platforms::getPlatBounds()
 	return platform.getGlobalBounds();
 }
 
-sf::RectangleShape Platforms::getPlatSprite()
+sf::RectangleShape& Platforms::getPlatSprite()
 {
 	return platform;
 }

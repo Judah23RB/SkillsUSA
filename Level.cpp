@@ -1,60 +1,35 @@
 #include "Level.h"
-
+#include <sstream>
 
 Level::Level()
 {
 
 }
-
+//data is stored in platform file in order: xvalue, yvalue, length, plat Type
 void Level::loadLevel(std::string num)
 {
-	int temp;
+	int tempx, tempy, tempL, tempP;
 	std::ifstream fhandle;
-	std::string fileName = "LevelData/" + num + "/xval.txt";
+	std::string fileName = "LevelData/" + num + "/platData.txt";
 	
 	fhandle.open(fileName);
 	if (fhandle.is_open())
 	{
-		while (fhandle >> temp)
+		std::string line;
+		while (std::getline(fhandle,line))//fhandle >> temp)
 		{
+			std::istringstream ss(line);
+			ss >> tempx >> tempy >> tempL >> tempP;
 			platNum++;
-			xvals.push_back(temp);
+			xvals.push_back(tempx);
+			yvals.push_back(tempy);
+			length.push_back(tempL);
+			platTypes.push_back(tempP);
 		}
 		fhandle.close();
 	}
 	
-	fileName = "LevelData/" + num + "/yval.txt";
-	fhandle.open(fileName);
-	if (fhandle.is_open())
-	{
-		while (fhandle >> temp)
-		{
-			yvals.push_back(temp);
-		}
-		fhandle.close();
-	}
 	
-	fileName = "LevelData/" + num + "/length.txt";
-	fhandle.open(fileName);
-	if (fhandle.is_open())
-	{
-		while (fhandle >> temp)
-		{
-			length.push_back(temp);
-		}
-		fhandle.close();
-	}
-	
-	fileName = "LevelData/" + num + "/platType.txt";
-	fhandle.open(fileName);
-	if (fhandle.is_open())
-	{
-		while (fhandle >> temp)
-		{
-			platTypes.push_back(temp);
-		}
-		fhandle.close();
-	}
 	
 	initLevel();
 	
@@ -63,6 +38,7 @@ void Level::loadLevel(std::string num)
 
 Level::~Level()
 {
+	endPlat = nullptr;
 	delete[] leveldata;
 	leveldata = nullptr;
 }
@@ -80,6 +56,15 @@ void Level::initLevel()
 
 	endPlat = &leveldata[platNum - 1]; //final platform is end
 	endPlat->setType(5); //end plat will have separate sprite
+}
+//resets platform (and item) positions to original
+void Level::resetLevel()
+{
+	scrollSpeed = -.25;
+	for (int x = 0; x < platNum; x++)
+	{
+		leveldata[x].setPos(xvals.at(x), yvals.at(x));
+	}
 }
 
 

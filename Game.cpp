@@ -10,16 +10,11 @@ Game::Game()
 	initLevels();
 	initTextures();
 	
-	//for (int x = 0; x < 5; x++)
-		//backUp[x] = levels[x];
-	
 	if (!font.loadFromFile("ARCADECLASSIC.ttf"))
 		std::cout << "Error loading font" << std::endl;
 	
 	menu.setWindow(window);
 	
-	//used for playing levels again, initialize backups after level has been full initialized
-	backUp[0] = levels[0];
 	
 	win.setFont(font);
 	lose.setFont(font);
@@ -68,7 +63,7 @@ void Game::initTextures()
 	if (!playerImage.loadFromFile("Sprites/Player_Sprite_Sheet.png"))
 		std::cout << "Error loading Player Texture" << std::endl;
 
-	playerImage.createMaskFromColor(sf::Color(255, 255, 255), 0);
+	playerImage.createMaskFromColor(sf::Color(255, 255, 255), 0); //needed to make texture background transparant
 
 	backgroundImage.setTexture(background);
 	menu.loadBackground(backgroundImage);
@@ -97,11 +92,75 @@ void Game::runMainMenu()
 		window.clear();
 		window.display();
 		levelChoice = menu.levelMenu();
-		if (menu.isUnlocked(levelChoice - 1))
-			playLevel(levelChoice);
+		if (levelChoice == 6) //back
+			runMainMenu();
+		else if (menu.isUnlocked(levelChoice - 1))
+			playLevel(levelChoice - 1);
+		levelChoice = 0;
+		choice = 0;
 		break;
 	case 2:
 		//settings will allow turning off of music
+		choice = 0;
+		break;
+	case 3:
+		window.close();
+		break;
+	default:
+		break;
+	}
+	window.display();
+}
+
+void Game::runLostMenu()
+{
+	window.clear();
+	window.display();
+	
+	resetLevel(currentLevel - 1);
+	
+	int choice = menu.lostMenu();
+	switch (choice)
+	{
+	case 1: //play Level Again
+		
+		runMainMenu();
+		//playLevel(currentLevel - 1);
+		break;
+	case 2:
+		runMainMenu();
+		break;
+	case 3:
+		window.close();
+		break;
+	default:
+		break;
+	}
+	window.display();
+}
+
+void Game::runWonMenu()
+{
+	window.clear();
+	window.display();
+	delay(200);
+
+	menu.unlockLevel(currentLevel); //1
+	int choice = menu.wonMenu();
+	switch (choice)
+	{
+	case 1:
+		window.clear();
+		currentLevel++;
+		choice = 0;
+		runMainMenu();
+		//resetLevel(currentLevel - 2); //0 in level data is level 1
+		//playLevel(currentLevel); //play level 2
+		break;
+	case 2:
+		window.clear();
+		choice = 0;
+		runMainMenu();
 		break;
 	case 3:
 		window.close();
@@ -141,11 +200,11 @@ void Game::falling(Level &level)
 			
 			//checks to see how long player has been falling
 			if (fallClock.getElapsedTime().asSeconds() > 2)
-				player.updateHealth(-1); //minor
+				player.updateHealth(-1); //minor damage
 			else if (fallClock.getElapsedTime().asSeconds() > 4)
-				player.updateHealth(-2); //major
+				player.updateHealth(-2); //major damage
 			else if (fallClock.getElapsedTime().asSeconds() > 6)
-				player.updateHealth(-3); //autoKills
+				player.updateHealth(-3); //auto kills
 			
 			//std::cout << player.getHealth() << std::endl;
 			
@@ -194,10 +253,15 @@ void Game::falling(Level &level)
 //losing resets the current level
 void Game::movement(Level &level)
 {
+	bool lostLevel, wonLevel;
+	lostLevel = wonLevel = false;
 	while (window.isOpen())
 	{
-		if (!won(level)) //game loop
+		if (!wonLevel && !lostLevel) //game loop
 		{
+			wonLevel = won(level);
+			lostLevel = loss(level);
+			
 			falling(level);
 			player.moveInput(fallState, level.getScrollSpeed());
 			player.updateAnimations();
@@ -205,86 +269,39 @@ void Game::movement(Level &level)
 			drawSprites(level);
 			window.display();
 		}
-		else if (won(level)) //won menu
+		else if (wonLevel) //won menu
 		{
 			window.clear();
+			window.draw(win);
 			window.display();
-			delay(200);
-			
-			menu.unlockLevel(currentLevel);
-			int choice = menu.wonMenu();
-			switch (choice)
-			{
-			case 1:
-				window.clear();
-				currentLevel++;
-				resetLevel(currentLevel - 1);
-				playLevel(currentLevel);
-				break;
-			case 2:
-				window.clear();
-				runMainMenu();
-				break;
-			case 3:
-				window.close();
-				break;
-			default:
-				break;
-			}
-			window.display();
+			delay(500);
+			runWonMenu();
 		}
-		else if (loss(level)) //loss menu
+		else if (lostLevel) //loss menu
 		{
 			window.clear();
+			window.draw(lose);
 			window.display();
-			delay(200);
-			int choice = menu.lostMenu();
-			switch (choice)
-			{
-			case 1:
-				resetLevel(currentLevel);
-				playLevel(currentLevel);
-				break;
-			case 2:
-				window.clear();
-				window.display();
-				runMainMenu();
-				break;
-			case 3:
-				window.close();
-				break;
-			default:
-				break;
-			}
-			window.display();
+			delay(500);
+			runLostMenu();
+			
 		}
 		
 	}
 }
-
+//win if reach designated platform
 bool Game::won(Level &level)
 {
 	Platforms* temp = level.getEndPlat();
 	if (player.getPlayerBounds().intersects(temp->getPlatBounds()))
-	{
-		window.clear();
-		window.draw(win);
-		window.display();
-		
 		return true;
-	}
 	return false;
 }
-
+//lose if carried off screen, fall below final platform, or lose all health
 bool Game::loss(Level &level)
 {
 	if (player.getPosition().y < 0 || player.getPosition().y > level.getEndPlat()->getPos().y + 20 || player.getHealth() == 0)
-	{
-		window.draw(lose);
-		window.display();
 		return true;
-	}
-	
 	return false;
 }
 
@@ -303,9 +320,8 @@ void Game::playLevel(int level)
 
 void Game::resetLevel(int inp)
 {
-	levels[inp - 1] = backUp[inp - 1];
-	player.setPosition(sf::Vector2f(300, 10));
-	fallClock.restart();
+	levels[inp].resetLevel();
+	player.setHealth(3);
 }
 
 

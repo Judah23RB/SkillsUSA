@@ -14,8 +14,9 @@ public:
 	~Game();
 	
 	
-	void runMainMenu();
-	void runLevelMenu();
+	void runMainMenu(); //level and settings menu handled within main
+	void runLostMenu();
+	void runWonMenu();
 	void playLevel(int);
 	void drawSprites(Level&);
 	void movement(Level&);
@@ -24,16 +25,13 @@ public:
 private:
 	const static int WINDOWSIZE = 1000;
 	
-	bool started = false;
 	bool fallState;
 	int currentLevel = 1;
 	
 	sf::RenderWindow window;
 	sf::Font font;
-	sf::Texture platTextSheet;
-	sf::Texture background;
+	sf::Texture platTextSheet, background, playerTexts;
 	sf::Image playerImage;
-	sf::Texture playerTexts;
 	sf::Sprite backgroundImage;
 	sf::Text win, lose;
 	sf::Clock fallClock;
@@ -42,10 +40,9 @@ private:
 	Player player;
 	
 	Level levels[5];
-	Level backUp[5];
 
 	
-	std::vector<const sf::Texture*> levelTexts;
+	std::vector<const sf::Texture*> levelTexts; //holds pointers to sprite sheets needed for level
 	
 	void initLevels();
 	void initWindow();
