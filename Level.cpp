@@ -31,7 +31,7 @@ void Level::loadLevel(std::string num)
 		fhandle.close();
 	}
 
-	fileName = "LevelData/" + num + "/itemData";
+	fileName = "LevelData/" + num + "/itemData.txt";
 	fhandle.open(fileName);
 	{
 		if (fhandle.is_open())
