@@ -230,7 +230,7 @@ void Game::falling(Level &level)
 			//checks type of collided platform for effect on player
 			switch (platType)
 			{
-			case 1:
+			case 1: //base
 				player.resetYVelocity();
 				player.collide(level.getScrollSpeed());
 				fallClock.restart();
@@ -238,21 +238,21 @@ void Game::falling(Level &level)
 			case 2:
 				//continues to fall, platform animation handled in level?
 				break;
-			case 3:
+			case 3: //tread left
 				player.resetYVelocity();
 				player.collide(level.getScrollSpeed());
-				player.move(-1, 0);
+				player.move(-.5, 0);
 				player.updatePhysics();
 				fallClock.restart();
 				break;
-			case 4:
+			case 4: //tread right
 				player.resetYVelocity();
 				player.collide(level.getScrollSpeed());
-				player.move(1, 0);
+				player.move(.5, 0);
 				player.updatePhysics();
 				fallClock.restart();
 				break;
-			case 5:
+			case 5: //spike auto kills
 				player.setHealth(0);
 				break;
 			case 6: //end plat, victory condition handled seperatly 
