@@ -91,7 +91,7 @@ void Level::initLevel()
 	}
 
 	endPlat = &leveldata[platNum - 1]; //final platform is end
-	endPlat->setType(5); //end plat will have separate sprite
+	endPlat->setType(6); //end plat will have separate sprite
 }
 //resets platform (and item) positions to original
 void Level::resetLevel()
@@ -246,7 +246,7 @@ void Level::levelProgression()
 
 
 //0 is platforms, 1 items, in texts vector
-//1 is basic, 2 is fake, 3 is tread left, 4 is tread right, 5 is spike, 6 is end for PLATFORMS
+//1 is basic, 2 is fake, 3 is tread R, 4 is tread L, 5 is spike, 6 is end for PLATFORMS
 //1 is score, 2 is health, 3 is slow Fall
 void Level::loadTexture(std::vector<const sf::Texture*> texts)
 {
@@ -262,6 +262,7 @@ void Level::loadTexture(std::vector<const sf::Texture*> texts)
 	sf::IntRect basePlat(135, 0, 80, 10);
 	sf::IntRect brokePlat(0, 0, 80, 10);
 	sf::IntRect endPlat(135,21,80,20);
+	
 	sf::IntRect spikePlat(220, 0, 80, 19);
 	sf::IntRect treadRPlat(306, 0, 80, 10);
 	sf::IntRect treadLPlat(306, 15, 80, 10);
@@ -284,10 +285,10 @@ void Level::loadTexture(std::vector<const sf::Texture*> texts)
 			leveldata[x].setTextureRect(brokePlat);
 			break;
 		case 3:
-			leveldata[x].setTextureRect(treadLPlat); //switch to tread plat
+			leveldata[x].setTextureRect(treadRPlat); //switch to tread plat
 			break;
 		case 4:
-			leveldata[x].setTextureRect(treadRPlat); //switch to tread plat
+			leveldata[x].setTextureRect(treadLPlat); //switch to tread plat
 			break;
 		case 5:
 			leveldata[x].setTextureRect(spikePlat); //switch to spike plat

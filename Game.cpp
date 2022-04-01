@@ -203,7 +203,7 @@ void Game::falling(Level &level)
 	if(!loss(level))
 	{
 		itemCollision(level); //independent of player physics
-		
+		player.horizMoveModifier(0); //resets player movement speed
 							  
 		// if in bounds and not colliding, player falls as window scrolls
 		if (player.getPosition().y < WINDOWSIZE && !level.collision(player.getPlayerBounds(), platType))
@@ -239,16 +239,18 @@ void Game::falling(Level &level)
 				//continues to fall, platform animation handled in level?
 				break;
 			case 3: //tread left
+				player.horizMoveModifier(-.5);
 				player.resetYVelocity();
 				player.collide(level.getScrollSpeed());
-				player.move(-.5, 0);
+				player.move(-1, 0);
 				player.updatePhysics();
 				fallClock.restart();
 				break;
 			case 4: //tread right
+				player.horizMoveModifier(.5);
 				player.resetYVelocity();
 				player.collide(level.getScrollSpeed());
-				player.move(.5, 0);
+				player.move(1, 0);
 				player.updatePhysics();
 				fallClock.restart();
 				break;
@@ -339,7 +341,10 @@ bool Game::won(Level &level)
 {
 	Platforms* temp = level.getEndPlat();
 	if (player.getPlayerBounds().intersects(temp->getPlatBounds()))
-		return true;
+	{
+		if (player.getHealth() != 0)
+			return true;
+	}
 	return false;
 }
 //lose if carried off screen, fall below final platform, or lose all health

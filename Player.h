@@ -15,6 +15,7 @@ public:
 
 	
 	//physics
+	void horizMoveModifier(double);
 	void moveInput(bool, double); //fallstate, scroll speed
 	void move(const int, const int);
 	void updatePhysics();
@@ -33,6 +34,8 @@ private:
 	//Physics
 	sf::Vector2f velocity;
 	float accel, drag, maxVelocity, maxfallVelocity, minVelocity, gravity, yMaxVelocity;
+	int lMoveSpeed = -1;
+	int rMoveSpeed = 1;
 	
 	//animation
 	int currentState = animState::idle;

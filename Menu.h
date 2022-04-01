@@ -32,7 +32,7 @@ public:
 
 private:
 	std::vector<Button> buttons;
-	bool unlocked[5] = {true,false,false,false,false};
+	bool unlocked[5] = {true,true,true,true,false};
 	sf::RenderWindow* screen = nullptr;
 	sf::Font font;
 	sf::Text title;

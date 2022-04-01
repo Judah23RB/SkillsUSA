@@ -23,7 +23,7 @@ void Player::initPlayer()
 void Player::initPhysics()
 {
 	maxVelocity = 1;
-	maxfallVelocity = .5;
+	maxfallVelocity = .6;
 	minVelocity = .05;
 	accel = 1.1;
 	drag = 0.8;
@@ -56,17 +56,35 @@ void Player::moveInput(bool fallState, double scroll)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		if (getPosition().x > 0)
-			move(-1, 0);
+			move(lMoveSpeed, 0);
 		currentState = animState::left;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		if (getPosition().x < 600)
-			move(1, 0);
+			move(rMoveSpeed, 0);
 		currentState = animState::right;
 	}
 	updateAnimations();
 	updatePhysics();
+}
+
+
+//allows tread platform to impact player movement speed;
+void Player::horizMoveModifier(double modifier)
+{
+	//increases and decreases opposite movement speed with same math
+	rMoveSpeed += modifier;
+	lMoveSpeed += modifier;
+	maxVelocity += abs(modifier * 1.5);
+
+	//reset movement speeds
+	if (modifier == 0)
+	{
+		maxVelocity = 1;
+		rMoveSpeed = 1;
+		lMoveSpeed = -1;
+	}
 }
 void Player::move(const int x, const int y)
 {
