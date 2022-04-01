@@ -6,6 +6,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <fstream>
+#include <SFML/Audio.hpp>
 
 class Game
 {
@@ -37,18 +38,21 @@ private:
 	sf::Sprite backgroundImage;
 	sf::Text win, lose;
 	sf::Clock fallClock;
-	
+	sf::SoundBuffer* soundbuffer = nullptr;
+	sf::Music menuMusic, gameMusic;
+
 	Menu menu;
 	Player player;
 	
 	Level levels[5];
 
-	
+	std::vector<sf::Sound> sounds; //0 is score, 1 is health, 2 is slow fall, 3 is fall damage, 4 is win, 5 is lose
 	std::vector<const sf::Texture*> levelTexts; //holds pointers to sprite sheets needed for level
 	
 	void initLevels();
 	void initWindow();
 	void initTextures();
+	void initSounds();
 	
 	void falling(Level&);
 	void itemCollision(Level&);
