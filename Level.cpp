@@ -100,6 +100,15 @@ void Level::resetLevel()
 	for (int x = 0; x < platNum; x++)
 	{
 		leveldata[x].setPos(xvals.at(x), yvals.at(x));
+		sf::IntRect brokePlat(0, 0, 80, 10);
+		if (leveldata[x].getType() == 2)
+			leveldata[x].setTextureRect(brokePlat);
+		
+	}
+
+	for (int x = 0; x < itemNum; x++)
+	{
+		leveldata[x].setPos(iXVals.at(x), iYVals.at(x));
 	}
 }
 
@@ -234,11 +243,7 @@ void Level::levelProgression()
 		changeScrollSpeed(-.75);
 }
 
-void Level::loadTexture(const sf::Texture* textr)
-{
-	for (int x = 0; x < platNum; x++)
-		leveldata[x].setTexture(textr);
-}
+
 
 //0 is platforms, 1 items, 2 enemies in texts vector
 //1 is basic, 2 is fake, 3 is tread left, 4 is tread right, 5 is end for PLATFORMS

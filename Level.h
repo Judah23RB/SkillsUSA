@@ -18,8 +18,8 @@ public:
 	void initLevel();
 	void resetLevel(); //used after level is completed/failed
 
-	void loadTexture(const sf::Texture*);
 	void loadTexture(std::vector<const sf::Texture*>);
+	void animateBrokePlat(Platforms&);
 	
 	int getPlatNum();
 	bool collision(sf::FloatRect, int&); //passes in boundary box, storage int that is set to platform type 
@@ -41,14 +41,12 @@ private:
 	
 	std::vector<int> xvals, yvals, length, platTypes; //platform data
 	std::vector<int> iXVals, iYVals, iType; //item data
-	sf::Vector2f windowsize;
-	Platforms* leveldata = nullptr;
-	Item* itemData = nullptr;
+	
+	Platforms* leveldata = nullptr; //heap array
+	Item* itemData = nullptr; //heap array
 	Platforms* endPlat = nullptr;
 
 	
 	
-	
-	void animateBrokePlat(Platforms&);
 };
 

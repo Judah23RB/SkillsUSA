@@ -22,17 +22,17 @@ Game::Game()
 	win.setFillColor(sf::Color::Green);
 	lose.setFillColor(sf::Color::Red);
 	
-	win.setString("YOU WIN");
+	win.setString("YOU WIN!");
 	lose.setString("YOU LOSE");
 	
-	win.setCharacterSize(50);
-	lose.setCharacterSize(50);
+	win.setCharacterSize(80);
+	lose.setCharacterSize(80);
 	
 	win.setOrigin(win.getCharacterSize() / 2, win.getCharacterSize() / 2);
 	lose.setOrigin(lose.getCharacterSize() / 2, lose.getCharacterSize() / 2);
 	
-	win.setPosition(window.getSize().x / 2, window.getSize().y / 2);
-	lose.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+	win.setPosition(200, 400);
+	lose.setPosition(200, 400);
 }
 
 Game::~Game()
@@ -132,7 +132,7 @@ void Game::runLostMenu()
 {
 	window.clear();
 	window.display();
-	
+	delay(500);
 	resetLevel(currentLevel - 1);
 	
 	int choice = menu.lostMenu();
@@ -159,7 +159,7 @@ void Game::runWonMenu()
 {
 	window.clear();
 	window.display();
-	delay(200);
+	delay(500);
 
 	menu.unlockLevel(currentLevel); //1
 	int choice = menu.wonMenu();
@@ -169,9 +169,8 @@ void Game::runWonMenu()
 		window.clear();
 		currentLevel++;
 		choice = 0;
-		runMainMenu();
 		resetLevel(currentLevel - 2); //0 in level data is level 1
-		//playLevel(currentLevel); //play level 2
+		playLevel(currentLevel - 1); //play level 2
 		break;
 	case 2:
 		window.clear();
@@ -316,6 +315,7 @@ void Game::movement(Level &level)
 		else if (wonLevel) //won menu
 		{
 			window.clear();
+			window.draw(backgroundImage);
 			window.draw(win);
 			window.display();
 			delay(500);
@@ -325,6 +325,7 @@ void Game::movement(Level &level)
 		else if (lostLevel) //loss menu
 		{
 			window.clear();
+			window.draw(backgroundImage);
 			window.draw(lose);
 			window.display();
 			delay(500);

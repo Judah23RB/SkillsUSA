@@ -200,15 +200,15 @@ void Menu::wonOptions()
 	Button temp("", 0, font);
 
 	temp = Button("Next Level", 1, font);
-	temp.setPosition(0, screen->getSize().y * .25);
+	temp.setPosition(100, screen->getSize().y * .25);
 	buttons.push_back(temp);
 
 	temp = Button("Main Menu", 2, font);
-	temp.setPosition(0, screen->getSize().y / 2);
+	temp.setPosition(100, screen->getSize().y  * .5);
 	buttons.push_back(temp);
 
 	temp = Button("Quit", 3, font);
-	temp.setPosition(0, screen->getSize().y * .75);
+	temp.setPosition(100, screen->getSize().y * .75);
 	buttons.push_back(temp);
 
 }
@@ -221,15 +221,15 @@ void Menu::lostOptions()
 	Button temp("", 0, font);
 
 	temp = Button("Play Again", 1, font);
-	temp.setPosition(0, screen->getSize().y * .25);
+	temp.setPosition(100, screen->getSize().y * .25);
 	buttons.push_back(temp);
 
 	temp = Button("Main Menu", 2, font);
-	temp.setPosition(0, screen->getSize().y / 2);
+	temp.setPosition(100, screen->getSize().y * .5);
 	buttons.push_back(temp);
 
 	temp = Button("Quit", 3, font);
-	temp.setPosition(0, screen->getSize().y * .75);
+	temp.setPosition(100, screen->getSize().y * .75);
 	buttons.push_back(temp);
 }
 
