@@ -28,6 +28,7 @@ private:
 	bool fallState;
 	int currentLevel = 1;
 	int score = 0;
+	bool lostLevel, wonLevel;
 	
 	sf::RenderWindow window;
 	sf::Font font;

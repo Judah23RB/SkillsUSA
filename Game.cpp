@@ -139,11 +139,11 @@ void Game::runLostMenu()
 	switch (choice)
 	{
 	case 1: //play Level Again
-		
-		runMainMenu();
-		//playLevel(currentLevel - 1);
+		resetLevel(currentLevel - 1);
+		playLevel(currentLevel - 1);
 		break;
 	case 2:
+		resetLevel(currentLevel - 1);
 		runMainMenu();
 		break;
 	case 3:
@@ -175,6 +175,7 @@ void Game::runWonMenu()
 	case 2:
 		window.clear();
 		choice = 0;
+		resetLevel(currentLevel - 2);
 		runMainMenu();
 		break;
 	case 3:
@@ -287,6 +288,10 @@ void Game::itemCollision(Level& level)
 		case 3:
 			level.changeScrollSpeed(level.getScrollSpeed() + .025);
 			break;
+		case 4:
+			wonLevel = true;
+			break;
+
 		}
 	}
 }
@@ -297,12 +302,12 @@ void Game::itemCollision(Level& level)
 //losing resets the current level
 void Game::movement(Level &level)
 {
-	bool lostLevel, wonLevel;
 	lostLevel = wonLevel = false;
 	while (window.isOpen())
 	{
 		if (!wonLevel && !lostLevel) //game loop
 		{
+			//wonLevel handled in item collision
 			wonLevel = won(level);
 			lostLevel = loss(level);
 			
