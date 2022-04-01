@@ -27,10 +27,11 @@ private:
 	
 	bool fallState;
 	int currentLevel = 1;
+	int score = 0;
 	
 	sf::RenderWindow window;
 	sf::Font font;
-	sf::Texture platTextSheet, background, playerTexts;
+	sf::Texture platTextSheet, background, playerTexts, itemSheet;
 	sf::Image playerImage;
 	sf::Sprite backgroundImage;
 	sf::Text win, lose;
@@ -49,6 +50,7 @@ private:
 	void initTextures();
 	
 	void falling(Level&);
+	void itemCollision(Level&);
 
 	bool won(Level&);
 	bool loss(Level&);

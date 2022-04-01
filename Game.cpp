@@ -67,16 +67,24 @@ void Game::initTextures()
 	if (!playerImage.loadFromFile("Sprites/Player_Sprite_Sheet.png"))
 		std::cout << "Error loading Player Texture" << std::endl;
 
+	if (!itemSheet.loadFromFile("Sprites/Items.jpg"))
+		std::cout << "Error loading Player Texture" << std::endl;
+
 	playerImage.createMaskFromColor(sf::Color(255, 255, 255), 0); //needed to make texture background transparant
 
 	backgroundImage.setTexture(background);
 	menu.loadBackground(backgroundImage);
 
 	const sf::Texture* textureptr = &platTextSheet;
+
 	sf::Texture* playerTextureptr = &playerTexts;
 	
-	levelTexts.push_back(textureptr);
 
+	levelTexts.push_back(textureptr);
+	
+	textureptr = &itemSheet;
+	levelTexts.push_back(textureptr);
+	
 	textureptr = &playerTexts;
 	playerTexts.loadFromImage(playerImage);
 	player.setTexture(playerTextureptr);
@@ -84,6 +92,10 @@ void Game::initTextures()
 
 	//will eventually load all textures in same way
 	levels[0].loadTexture(levelTexts);
+	levels[1].loadTexture(levelTexts);
+	levels[2].loadTexture(levelTexts);
+	levels[3].loadTexture(levelTexts);
+	levels[4].loadTexture(levelTexts);
 }
 
 void Game::runMainMenu()
@@ -185,11 +197,15 @@ void Game::drawSprites(Level &level)
 }
 
 //Player will fall as Level Scrolls until player loses
+//handles platform and item collision
 void Game::falling(Level &level)
 {
 	int platType = 0;
 	if(!loss(level))
 	{
+		itemCollision(level); //independent of player physics
+		
+							  
 		// if in bounds and not colliding, player falls as window scrolls
 		if (player.getPosition().y < WINDOWSIZE && !level.collision(player.getPlayerBounds(), platType))
 		{
@@ -212,7 +228,7 @@ void Game::falling(Level &level)
 			
 			//std::cout << player.getHealth() << std::endl;
 			
-			//stop gravity, update physics, have player collide according to scroll speed
+			//checks type of collided platform for effect on player
 			switch (platType)
 			{
 			case 1:
@@ -237,7 +253,10 @@ void Game::falling(Level &level)
 				player.updatePhysics();
 				fallClock.restart();
 				break;
-			case 5: //end plat, victory condition handled seperatly 
+			case 5:
+				player.setHealth(0);
+				break;
+			case 6: //end plat, victory condition handled seperatly 
 				player.resetYVelocity();
 				player.collide(level.getScrollSpeed());
 				fallClock.restart();
@@ -247,6 +266,26 @@ void Game::falling(Level &level)
 			}
 			
 			level.scrollLevel(window);
+		}
+	}
+}
+//handles player and game impact of item collision
+void Game::itemCollision(Level& level)
+{
+	int item = 0;
+	if (level.itemCollision(player.getPlayerBounds(), item))
+	{
+		switch (item)
+		{
+		case 1:
+			score += 100;
+			break;
+		case 2:
+			player.updateHealth(1);
+			break;
+		case 3:
+			level.changeScrollSpeed(level.getScrollSpeed() + .025);
+			break;
 		}
 	}
 }
@@ -269,6 +308,7 @@ void Game::movement(Level &level)
 			falling(level);
 			player.moveInput(fallState, level.getScrollSpeed());
 			player.updateAnimations();
+			
 			window.clear();
 			drawSprites(level);
 			window.display();

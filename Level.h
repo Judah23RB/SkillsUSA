@@ -6,6 +6,7 @@
 #include <string>
 #include "Platforms.h"
 #include "Player.h"
+#include "Item.h"
 class Level
 {
 public:
@@ -22,23 +23,32 @@ public:
 	
 	int getPlatNum();
 	bool collision(sf::FloatRect, int&); //passes in boundary box, storage int that is set to platform type 
+	bool itemCollision(sf::FloatRect, int&); //boundary box, int set to item type if collision occurs
 	void drawLevel(sf::RenderWindow&);
 	
 	Platforms* getEndPlat();
 	void scrollLevel(sf::RenderWindow&);
 	void levelProgression();
+	void changeScrollSpeed(double);
 
 	double getScrollSpeed(); // used for collision
 private:
 	int platNum = 0;
+	int itemNum = 0;
 	double scrollSpeed = -.25;
+	bool noItems = false;
 	std::string levNum; // reading in data
 	
-	std::vector<int> xvals, yvals, length, platTypes;
+	std::vector<int> xvals, yvals, length, platTypes; //platform data
+	std::vector<int> iXVals, iYVals, iType; //item data
 	sf::Vector2f windowsize;
 	Platforms* leveldata = nullptr;
+	Item* itemData = nullptr;
 	Platforms* endPlat = nullptr;
-	void changeScrollSpeed(double);
 
+	
+	
+	
+	void animateBrokePlat(Platforms&);
 };
 
