@@ -33,9 +33,7 @@ Menu::~Menu()
 
 int Menu::startMenu()
 {
-	
-	
-	mainMenu = true;
+	buttons.clear();
 	screen->clear();
 	startOptions();
 	return inputs();
@@ -203,7 +201,7 @@ void Menu::wonOptions()
 	temp.setPosition(100, screen->getSize().y * .25);
 	buttons.push_back(temp);
 
-	temp = Button("Main Menu", 2, font);
+	temp = Button("Menu", 2, font);
 	temp.setPosition(100, screen->getSize().y  * .5);
 	buttons.push_back(temp);
 
@@ -220,27 +218,27 @@ void Menu::lostOptions()
 
 	Button temp("", 0, font);
 
-	temp = Button("Play Again", 1, font);
+	temp = Button("Play Again", 4, font);
 	temp.setPosition(100, screen->getSize().y * .25);
 	buttons.push_back(temp);
 
-	temp = Button("Main Menu", 2, font);
+	temp = Button("Menu", 5, font);
 	temp.setPosition(100, screen->getSize().y * .5);
 	buttons.push_back(temp);
 
-	temp = Button("Quit", 3, font);
+	temp = Button("Quit", 6, font);
 	temp.setPosition(100, screen->getSize().y * .75);
 	buttons.push_back(temp);
 }
 
 bool Menu::isUnlocked(int level)
 {
-	if (unlocked[level])
+	if (unlocked[level - 1])
 		return true;
 	return false;
 }
 
 void Menu::unlockLevel(int level)
 {
-	unlocked[level] = true;
+	unlocked[level - 1] = true;
 }

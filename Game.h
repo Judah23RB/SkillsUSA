@@ -18,6 +18,7 @@ public:
 	void runMainMenu(); //level and settings menu handled within main
 	void runLostMenu();
 	void runWonMenu();
+	void runLevelMenu();
 	void playLevel(int);
 	void drawSprites(Level&);
 	void movement(Level&);
@@ -33,9 +34,9 @@ private:
 	
 	sf::RenderWindow window;
 	sf::Font font;
-	sf::Texture platTextSheet, background, playerTexts, itemSheet;
+	sf::Texture platTextSheet, background, playerTexts, itemSheet, healthSheet;
 	sf::Image playerImage;
-	sf::Sprite backgroundImage;
+	sf::Sprite backgroundImage, health;
 	sf::Text win, lose;
 	sf::Clock fallClock;
 	sf::SoundBuffer* soundbuffer = nullptr;
@@ -57,7 +58,7 @@ private:
 	void falling(Level&);
 	void itemCollision(Level&);
 
-	bool won(Level&);
+	void updateHealth();
 	bool loss(Level&);
 
 	void resetLevel(int);

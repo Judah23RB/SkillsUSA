@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Button.h"
 #include <vector>
 class Menu
@@ -21,6 +22,9 @@ public:
 	
 	//textures
 	void loadBackground(sf::Sprite&);
+
+	//Music!!!!
+	void loadMusic(sf::Music&);
 	
 	//Animations
 	void startAnimation();
@@ -38,7 +42,7 @@ private:
 	sf::Text title;
 	sf::Sprite* background = nullptr;
 
-	bool mainMenu = true; //used for displaying title
+	bool mainMenu = false; //used for displaying title
 
 	int inputs();
 	void startOptions();

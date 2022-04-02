@@ -28,7 +28,7 @@ void Player::initPhysics()
 	accel = 1.1;
 	drag = 0.8;
 	gravity = .1;
-	yMaxVelocity = .5;
+	yMaxVelocity = .6;
 }
 
 sf::Sprite& Player::getPlaySprite()

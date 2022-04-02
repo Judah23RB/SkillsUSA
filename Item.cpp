@@ -16,10 +16,10 @@ void Item::setPos(int x, int y)
 	sprite.setPosition(x, y);
 }
 
-void Item::setTexture(const sf::Texture* text)
+
+void Item::setTexture(const sf::Texture& text)
 {
-	sf::Texture texture = *text;
-	sprite.setTexture(texture);
+	sprite.setTexture(text);
 }
 
 void Item::setTextureRect(const sf::IntRect rect)

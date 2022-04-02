@@ -19,6 +19,7 @@ public:
 	void resetLevel(); //used after level is completed/failed
 
 	void loadTexture(std::vector<const sf::Texture*>);
+	
 	void animateBrokePlat(Platforms&);
 	
 	int getPlatNum();
@@ -26,7 +27,7 @@ public:
 	bool itemCollision(sf::FloatRect, int&); //boundary box, int set to item type if collision occurs
 	void drawLevel(sf::RenderWindow&);
 	
-	Platforms* getEndPlat();
+	
 	void scrollLevel(sf::RenderWindow&);
 	void levelProgression();
 	void changeScrollSpeed(double);
