@@ -34,7 +34,7 @@ private:
 	sf::RenderWindow window;
 	sf::Font font;
 	sf::Texture platTextSheet, background, playerTexts, itemSheet;
-	sf::Image playerImage, itemImage;
+	sf::Image playerImage;
 	sf::Sprite backgroundImage;
 	sf::Text win, lose;
 	sf::Clock fallClock;

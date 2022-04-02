@@ -249,22 +249,17 @@ void Level::levelProgression()
 }
 
 
-void Level::loadItemTexture(sf::Texture* text)
-{
-	for (int x = 0; x < itemNum; x++)
-	{
-		itemData[x].setTexture(text);
-	}
-}
 //0 is platforms, 1 items, in texts vector
 //1 is basic, 2 is fake, 3 is tread R, 4 is tread L, 5 is spike, 6 is end for PLATFORMS
 //1 is score, 2 is health, 3 is slow Fall, 4 is end Flag
 void Level::loadTexture(std::vector<const sf::Texture*> texts)
 {
-
+	
 	for (int x = 0; x < platNum; x++)
 		leveldata[x].setTexture(texts.at(0));
-
+	
+	for (int x = 0; x < itemNum; x++)
+		itemData[x].setTexture(*texts.at(1));
 
 
 

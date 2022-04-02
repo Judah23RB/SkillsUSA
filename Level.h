@@ -19,7 +19,7 @@ public:
 	void resetLevel(); //used after level is completed/failed
 
 	void loadTexture(std::vector<const sf::Texture*>);
-	void loadItemTexture(sf::Texture*);
+	
 	void animateBrokePlat(Platforms&);
 	
 	int getPlatNum();

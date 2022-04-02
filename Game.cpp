@@ -67,38 +67,38 @@ void Game::initTextures()
 	if (!playerImage.loadFromFile("Sprites/Player_Sprite_Sheet.png"))
 		std::cout << "Error loading Player Texture" << std::endl;
 
-	if (!itemImage.loadFromFile("Sprites/Items.png"))
+	if (!itemSheet.loadFromFile("Sprites/ItemSheet.png"))
 		std::cout << "Error loading Player Texture" << std::endl;
 
 	playerImage.createMaskFromColor(sf::Color(255, 255, 255), 0); //needed to make texture background transparant
-	itemImage.createMaskFromColor(sf::Color(255, 255, 255), 0);
+
 
 	backgroundImage.setTexture(background);
 	menu.loadBackground(backgroundImage);
 
+	
+	
+	//holds platforms
 	const sf::Texture* textureptr = &platTextSheet;
-	
 	levelTexts.push_back(textureptr);
 	
-	itemSheet.loadFromImage(itemImage);
-	
-	sf::Texture* itemptr = &itemSheet;
+	//items
+	textureptr = &itemSheet;
 	levelTexts.push_back(textureptr);
 	
+	//player
 	sf::Texture* playerTextureptr = &playerTexts;
-	textureptr = &playerTexts;
 	playerTexts.loadFromImage(playerImage);
 	player.setTexture(playerTextureptr);
 
+	//health
 
-	levels[0].loadItemTexture(itemptr);
-	levels[1].loadItemTexture(itemptr);
-	levels[2].loadItemTexture(itemptr);
-	levels[3].loadItemTexture(itemptr);
-	levels[4].loadItemTexture(itemptr);
+
+	
 	
 	
 	//will eventually load all textures in same way
+	std::cout << levelTexts.size() << std::endl;
 	levels[0].loadTexture(levelTexts);
 	levels[1].loadTexture(levelTexts);
 	levels[2].loadTexture(levelTexts);
@@ -291,7 +291,8 @@ void Game::itemCollision(Level& level)
 			score += 100;
 			break;
 		case 2:
-			player.updateHealth(1);
+			if (player.getHealth() != 3)
+				player.updateHealth(1);
 			break;
 		case 3:
 			level.changeScrollSpeed(level.getScrollSpeed() + .025);
