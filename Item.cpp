@@ -22,6 +22,11 @@ void Item::setTexture(const sf::Texture* text)
 	sprite.setTexture(texture);
 }
 
+void Item::setTexture(sf::Texture* text)
+{
+	sprite.setTexture(*text);
+}
+
 void Item::setTextureRect(const sf::IntRect rect)
 {
 	sprite.setTextureRect(rect);

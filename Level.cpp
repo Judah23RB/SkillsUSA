@@ -249,7 +249,13 @@ void Level::levelProgression()
 }
 
 
-
+void Level::loadItemTexture(sf::Texture* text)
+{
+	for (int x = 0; x < itemNum; x++)
+	{
+		itemData[x].setTexture(text);
+	}
+}
 //0 is platforms, 1 items, in texts vector
 //1 is basic, 2 is fake, 3 is tread R, 4 is tread L, 5 is spike, 6 is end for PLATFORMS
 //1 is score, 2 is health, 3 is slow Fall, 4 is end Flag
@@ -258,28 +264,26 @@ void Level::loadTexture(std::vector<const sf::Texture*> texts)
 
 	for (int x = 0; x < platNum; x++)
 		leveldata[x].setTexture(texts.at(0));
-	
-	if (!noItems)
-		for (int x = 0; x < itemNum; x++)
-			itemData[x].setTexture(texts.at(1));
-	
-	
+
+
+
+
 	sf::IntRect basePlat(135, 0, 80, 10);
 	sf::IntRect brokePlat(0, 0, 80, 10);
-	sf::IntRect endPlat(135,21,80,20);
-	
+	sf::IntRect endPlat(135, 21, 80, 20);
+
 	sf::IntRect spikePlat(220, 0, 80, 19);
 	sf::IntRect treadRPlat(306, 0, 80, 10);
 	sf::IntRect treadLPlat(306, 15, 80, 10);
 
-	sf::IntRect blueD(3, 6, 24,18);
+	sf::IntRect blueD(3, 6, 24, 18);
 	sf::IntRect greenD(32, 3, 26, 25);
 	sf::IntRect redD(67, 3, 16, 24);
 	sf::IntRect healthPack(91, 3, 29, 23);
 	sf::IntRect slowFall(123, 1, 24, 28);
-	sf::IntRect endFlag(154,1,22,28);
-	
-	
+	sf::IntRect endFlag(154, 1, 22, 28);
+
+
 	for (int x = 0; x < platNum; x++)
 	{
 		switch (leveldata[x].getType())
@@ -308,42 +312,35 @@ void Level::loadTexture(std::vector<const sf::Texture*> texts)
 		}
 
 	}
-	if (!noItems)
+
+	for (int x = 0; x < itemNum; x++)
 	{
-		for (int x = 0; x < itemNum; x++)
+		int randomColor = rand() % 3 + 1;
+		switch (itemData[x].getType())
 		{
-			int randomColor = rand() % 3 + 1;
-			switch (itemData[x].getType())
-			{
-			case 1: //set to random score item texture
+		case 1: //set to random score item texture
 
-				if (randomColor == 1)
-					itemData[x].setTextureRect(blueD);
-				if (randomColor == 2)
-					itemData[x].setTextureRect(greenD);
-				if (randomColor == 3)
-					itemData[x].setTextureRect(redD);
-				break;
-			case 2: //set to health pack
-				itemData[x].setTextureRect(healthPack);
-				break;
-			case 3:
-				itemData[x].setTextureRect(slowFall);
-				break;
-			case 4:
-				itemData[x].setTextureRect(endFlag);
-				break;
-			default:
-				break;
-			}
-
-
+			if (randomColor == 1)
+				itemData[x].setTextureRect(blueD);
+			if (randomColor == 2)
+				itemData[x].setTextureRect(greenD);
+			if (randomColor == 3)
+				itemData[x].setTextureRect(redD);
+			break;
+		case 2: //set to health pack
+			itemData[x].setTextureRect(healthPack);
+			break;
+		case 3:
+			itemData[x].setTextureRect(slowFall);
+			break;
+		case 4:
+			itemData[x].setTextureRect(endFlag);
+			break;
+		default:
+			break;
 		}
-			
-		
-		
+
 	}
-		
 }
 
 void Level::animateBrokePlat(Platforms& plat)
