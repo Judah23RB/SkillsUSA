@@ -33,9 +33,9 @@ private:
 	
 	sf::RenderWindow window;
 	sf::Font font;
-	sf::Texture platTextSheet, background, playerTexts, itemSheet;
+	sf::Texture platTextSheet, background, playerTexts, itemSheet, healthSheet;
 	sf::Image playerImage;
-	sf::Sprite backgroundImage;
+	sf::Sprite backgroundImage, health;
 	sf::Text win, lose;
 	sf::Clock fallClock;
 	sf::SoundBuffer* soundbuffer = nullptr;
@@ -57,6 +57,7 @@ private:
 	void falling(Level&);
 	void itemCollision(Level&);
 
+	void updateHealth();
 	bool won(Level&);
 	bool loss(Level&);
 

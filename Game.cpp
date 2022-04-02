@@ -70,6 +70,9 @@ void Game::initTextures()
 	if (!itemSheet.loadFromFile("Sprites/ItemSheet.png"))
 		std::cout << "Error loading Player Texture" << std::endl;
 
+	if (!healthSheet.loadFromFile("Sprites/Hearts.png"))
+		std::cout << "Error loading Hearts Texture" << std::endl;
+
 	playerImage.createMaskFromColor(sf::Color(255, 255, 255), 0); //needed to make texture background transparant
 
 
@@ -92,13 +95,14 @@ void Game::initTextures()
 	player.setTexture(playerTextureptr);
 
 	//health
-
-
+	health.setTexture(healthSheet);
+	sf::IntRect hearts3(0, 0, 49, 12);
+	health.setScale(2, 2);
+	health.setTextureRect(hearts3);
 	
 	
 	
 	//will eventually load all textures in same way
-	std::cout << levelTexts.size() << std::endl;
 	levels[0].loadTexture(levelTexts);
 	levels[1].loadTexture(levelTexts);
 	levels[2].loadTexture(levelTexts);
@@ -200,8 +204,38 @@ void Game::runWonMenu()
 void Game::drawSprites(Level &level)
 {
 	window.draw(backgroundImage);
+	window.draw(health);
 	window.draw(player.getPlaySprite());
 	level.drawLevel(window);
+}
+
+void Game::updateHealth()
+{
+	health.setPosition(sf::Vector2f(0, 0));
+	
+	sf::IntRect hearts3(0,0,49,12);
+	sf::IntRect hearts2(0,16,49,12);
+	sf::IntRect hearts1(0,32,49,12);
+	sf::IntRect hearts0(0,48,49,12);
+
+	switch (player.getHealth())
+	{
+	case 3:
+		health.setTextureRect(hearts3);
+		break;
+	case 2:
+		health.setTextureRect(hearts2);
+		break;
+	case 1:
+		health.setTextureRect(hearts1);
+		break;
+	case 0:
+		health.setTextureRect(hearts0);
+		break;
+	default:
+		health.setTextureRect(hearts0);
+		break;
+	}
 }
 
 //Player will fall as Level Scrolls until player loses
@@ -211,6 +245,7 @@ void Game::falling(Level &level)
 	int platType = 0;
 	if(!loss(level))
 	{
+		updateHealth();
 		itemCollision(level); //independent of player physics
 		player.horizMoveModifier(0); //resets player movement speed
 							  
@@ -227,12 +262,14 @@ void Game::falling(Level &level)
 			fallState = false;
 			
 			//checks to see how long player has been falling
-			if (fallClock.getElapsedTime().asSeconds() > 2)
+			if (fallClock.getElapsedTime().asSeconds() > 1.25)
 				player.updateHealth(-1); //minor damage
-			else if (fallClock.getElapsedTime().asSeconds() > 4)
+			else if (fallClock.getElapsedTime().asSeconds() > 2)
 				player.updateHealth(-2); //major damage
-			else if (fallClock.getElapsedTime().asSeconds() > 6)
+			else if (fallClock.getElapsedTime().asSeconds() > 2.5)
 				player.updateHealth(-3); //auto kills
+
+			
 			
 			//std::cout << player.getHealth() << std::endl;
 			
