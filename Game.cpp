@@ -1,6 +1,4 @@
 #include "Game.h"
-#include <iostream>
-#include <SFML/Graphics.hpp>
 #include <time.h>
 
 
@@ -9,6 +7,7 @@ Game::Game()
 	initWindow();
 	initLevels();
 	initTextures();
+	initSounds();
 	
 	if (!font.loadFromFile("ARCADECLASSIC.ttf"))
 		std::cout << "Error loading font" << std::endl;
@@ -110,21 +109,25 @@ void Game::initTextures()
 	levels[4].loadTexture(levelTexts);
 }
 
+void Game::initSounds()
+{
+	if (!gameMusic.openFromFile("AudioFiles/GameMusic.ogg"))
+		std::cout << "Error loading game Music" << std::endl;
+
+	if (!menuMusic.openFromFile("AudioFiles/GameMusic.ogg"))
+		std::cout << "Error loading Menu music" << std::endl;
+
+}
+
 void Game::runMainMenu()
 {
+	int choice = NULL;
 	int levelChoice;
-	int choice = menu.startMenu();
+	choice = menu.startMenu();
 	switch (choice)
 	{
 	case 1:
-		window.clear();
-		window.display();
-		levelChoice = menu.levelMenu();
-		if (levelChoice == 6) //back
-			runMainMenu();
-		else if (menu.isUnlocked(levelChoice - 1))
-			playLevel(levelChoice - 1);
-		levelChoice = 0;
+		runLevelMenu();
 		choice = 0;
 		break;
 	case 2:
@@ -145,20 +148,19 @@ void Game::runLostMenu()
 	window.clear();
 	window.display();
 	delay(500);
-	resetLevel(currentLevel - 1);
 	
 	int choice = menu.lostMenu();
 	switch (choice)
 	{
-	case 1: //play Level Again
-		resetLevel(currentLevel - 1);
-		playLevel(currentLevel - 1);
+	case 4: //play Level Again
+		resetLevel(currentLevel);
+		playLevel(currentLevel);
 		break;
-	case 2:
-		resetLevel(currentLevel - 1);
-		runMainMenu();
+	case 5: //return to main menu
+		resetLevel(currentLevel);
+		runLevelMenu();
 		break;
-	case 3:
+	case 6:
 		window.close();
 		break;
 	default:
@@ -173,22 +175,21 @@ void Game::runWonMenu()
 	window.display();
 	delay(500);
 
-	menu.unlockLevel(currentLevel); //1
+	menu.unlockLevel(currentLevel + 1); 
 	int choice = menu.wonMenu();
 	switch (choice)
 	{
-	case 1:
+	case 1: //play next level
 		window.clear();
 		currentLevel++;
 		choice = 0;
-		resetLevel(currentLevel - 2); //0 in level data is level 1
-		playLevel(currentLevel - 1); //play level 2
+		resetLevel(currentLevel); 
+		playLevel(currentLevel); 
 		break;
-	case 2:
+	case 2: //return to main menu
 		window.clear();
-		choice = 0;
-		resetLevel(currentLevel - 2);
-		runMainMenu();
+		resetLevel(currentLevel);
+		runLevelMenu();
 		break;
 	case 3:
 		window.close();
@@ -196,9 +197,20 @@ void Game::runWonMenu()
 	default:
 		break;
 	}
-	window.display();
+	//window.display();
 }
 
+
+void Game::runLevelMenu()
+{
+	int levelChoice;
+	window.clear();
+	levelChoice = menu.levelMenu();
+	if (levelChoice == 6) //back
+		runMainMenu();
+	else if (menu.isUnlocked(levelChoice))
+		playLevel(levelChoice);
+}
 
 
 void Game::drawSprites(Level &level)
@@ -353,8 +365,9 @@ void Game::movement(Level &level)
 	{
 		if (!wonLevel && !lostLevel) //game loop
 		{
+			
 			//wonLevel handled in item collision
-			wonLevel = won(level);
+			//wonLevel = won(level);
 			lostLevel = loss(level);
 			
 			falling(level);
@@ -364,23 +377,28 @@ void Game::movement(Level &level)
 			window.clear();
 			drawSprites(level);
 			window.display();
+			//gameMusic.play();
 		}
 		else if (wonLevel) //won menu
 		{
+			
 			window.clear();
 			window.draw(backgroundImage);
 			window.draw(win);
 			window.display();
+			gameMusic.stop();
 			delay(500);
 			runWonMenu();
 
 		}
 		else if (lostLevel) //loss menu
 		{
+			
 			window.clear();
 			window.draw(backgroundImage);
 			window.draw(lose);
 			window.display();
+			gameMusic.stop();
 			delay(500);
 			runLostMenu();
 		}
@@ -413,15 +431,15 @@ void Game::playLevel(int level)
 	fallClock.restart();
 	while (window.isOpen())
 	{
-		drawSprites(levels[level]);
-		movement(levels[level]);
+		drawSprites(levels[level - 1]);
+		movement(levels[level - 1]);
 		window.display();
 	}
 }
 
 void Game::resetLevel(int inp)
 {
-	levels[inp].resetLevel();
+	levels[inp - 1].resetLevel();
 	player.setHealth(3);
 }
 

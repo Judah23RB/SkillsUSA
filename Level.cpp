@@ -103,9 +103,7 @@ void Level::resetLevel()
 		sf::IntRect brokePlat(0, 0, 80, 10);
 		if (leveldata[x].getType() == 2)
 			leveldata[x].setTextureRect(brokePlat);
-		
 	}
-
 	for (int x = 0; x < itemNum; x++)
 	{
 		leveldata[x].setPos(iXVals.at(x), iYVals.at(x));

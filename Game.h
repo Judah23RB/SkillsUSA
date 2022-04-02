@@ -18,6 +18,7 @@ public:
 	void runMainMenu(); //level and settings menu handled within main
 	void runLostMenu();
 	void runWonMenu();
+	void runLevelMenu();
 	void playLevel(int);
 	void drawSprites(Level&);
 	void movement(Level&);
