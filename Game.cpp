@@ -147,17 +147,16 @@ void Game::runLostMenu()
 {
 	window.clear();
 	window.display();
+	resetLevel(currentLevel+1);
 	delay(500);
 	
 	int choice = menu.lostMenu();
 	switch (choice)
 	{
 	case 4: //play Level Again
-		resetLevel(currentLevel);
-		playLevel(currentLevel);
+		playLevel(currentLevel+1);
 		break;
 	case 5: //return to main menu
-		resetLevel(currentLevel);
 		runLevelMenu();
 		break;
 	case 6:
@@ -174,7 +173,7 @@ void Game::runWonMenu()
 	window.clear();
 	window.display();
 	delay(500);
-
+	resetLevel(currentLevel);
 	menu.unlockLevel(currentLevel + 1); 
 	int choice = menu.wonMenu();
 	switch (choice)
@@ -183,12 +182,11 @@ void Game::runWonMenu()
 		window.clear();
 		currentLevel++;
 		choice = 0;
-		resetLevel(currentLevel); 
+		
 		playLevel(currentLevel); 
 		break;
 	case 2: //return to main menu
 		window.clear();
-		resetLevel(currentLevel);
 		runLevelMenu();
 		break;
 	case 3:
@@ -386,7 +384,7 @@ void Game::movement(Level &level)
 			window.draw(backgroundImage);
 			window.draw(win);
 			window.display();
-			gameMusic.stop();
+			
 			delay(500);
 			runWonMenu();
 
@@ -398,28 +396,18 @@ void Game::movement(Level &level)
 			window.draw(backgroundImage);
 			window.draw(lose);
 			window.display();
-			gameMusic.stop();
+			
 			delay(500);
 			runLostMenu();
 		}
 		
 	}
 }
-//win if reach designated platform
-bool Game::won(Level &level)
-{
-	Platforms* temp = level.getEndPlat();
-	if (player.getPlayerBounds().intersects(temp->getPlatBounds()))
-	{
-		if (player.getHealth() != 0)
-			return true;
-	}
-	return false;
-}
+
 //lose if carried off screen, fall below final platform, or lose all health
 bool Game::loss(Level &level)
 {
-	if (player.getPosition().y < 0 || player.getPosition().y > level.getEndPlat()->getPos().y + 20 || player.getHealth() == 0)
+	if (player.getPosition().y < 0 || player.getPosition().y > 700 || player.getHealth() == 0)
 		return true;
 	return false;
 }
@@ -439,6 +427,7 @@ void Game::playLevel(int level)
 
 void Game::resetLevel(int inp)
 {
+	std::cout << "Resetting Level" << inp << std::endl;
 	levels[inp - 1].resetLevel();
 	player.setHealth(3);
 }

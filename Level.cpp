@@ -22,7 +22,6 @@ void Level::loadLevel(std::string num)
 		{
 			std::istringstream ss(line);
 			ss >> tempx >> tempy >> tempL >> tempP;
-			platNum++;
 			xvals.push_back(tempx);
 			yvals.push_back(tempy);
 			length.push_back(tempL);
@@ -50,8 +49,14 @@ void Level::loadLevel(std::string num)
 		}
 	}
 	
-	if (iXVals.empty())
-		noItems = true;
+	for (auto x : xvals)
+	{
+		platNum++;
+		//std::cout << x << std::endl;
+		
+	}
+	std::cout <<"Start:" << platNum << std::endl;
+	
 	
 	
 	initLevel();
@@ -80,26 +85,25 @@ void Level::initLevel()
 		leveldata[x].setType(platTypes.at(x));
 	}
 	
-	if (!noItems) //checks to see if level has any items
-	{
+	
 		itemData = new Item[itemNum];
 		for (int x = 0; x < itemNum; x++)
 		{
 			itemData[x].setPos(iXVals.at(x), iYVals.at(x));
 			itemData[x].setType(iType.at(x));
 		}
-	}
-
-	endPlat = &leveldata[platNum - 1]; //final platform is end
-	endPlat->setType(6); //end plat will have separate sprite
+	
 }
 //resets platform (and item) positions to original
 void Level::resetLevel()
 {
 	scrollSpeed = -.25;
+	std::cout << "end:" << platNum << std::endl;
 	for (int x = 0; x < platNum; x++)
 	{
 		leveldata[x].setPos(xvals.at(x), yvals.at(x));
+		
+		//reset broke plat texture
 		sf::IntRect brokePlat(0, 0, 80, 10);
 		if (leveldata[x].getType() == 2)
 			leveldata[x].setTextureRect(brokePlat);
@@ -177,49 +181,43 @@ bool Level::collision(sf::FloatRect p, int &platType)
 
 bool Level::itemCollision(sf::FloatRect p, int& itemType)
 {
-	if (!noItems)//generic check for items
+	for (int x = 0; x < itemNum; x++)
 	{
-		for (int x = 0; x < itemNum; x++)
+		if (itemData[x].getBounds().intersects(p))
 		{
-			if (itemData[x].getBounds().intersects(p))
+			switch (itemData[x].getType())
 			{
-				switch (itemData[x].getType())
-				{
-				case 1:
-					itemType = 1;
-					itemData[x].clearSprite();
-					return true;
-					break;
-				case 2:
-					itemType = 2;
-					itemData[x].clearSprite();
-					return true;
-					break;
-				case 3:
-					itemType = 3;
-					itemData[x].clearSprite();
-					return true;
-					break;
-				default:
-				case 4:
-					itemType = 4;
-					itemData[x].clearSprite();
-					return true;
-					break;
-					break;
-				}
+			case 1:
+				itemType = 1;
+				itemData[x].clearSprite();
+				return true;
+				break;
+			case 2:
+				itemType = 2;
+				itemData[x].clearSprite();
+				return true;
+				break;
+			case 3:
+				itemType = 3;
+				itemData[x].clearSprite();
+				return true;
+				break;
+			default:
+			case 4:
+				itemType = 4;
+				itemData[x].clearSprite();
+				return true;
+				break;
+				break;
 			}
 		}
 	}
+		
+	
 	itemType = 0;
 	return false;
 }
 
-Platforms* Level::getEndPlat()
-{
-	Platforms* temp = endPlat;
-	return temp;
-}
 
 void Level::scrollLevel(sf::RenderWindow &w)
 {

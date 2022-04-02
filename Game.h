@@ -59,7 +59,6 @@ private:
 	void itemCollision(Level&);
 
 	void updateHealth();
-	bool won(Level&);
 	bool loss(Level&);
 
 	void resetLevel(int);

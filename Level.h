@@ -27,7 +27,7 @@ public:
 	bool itemCollision(sf::FloatRect, int&); //boundary box, int set to item type if collision occurs
 	void drawLevel(sf::RenderWindow&);
 	
-	Platforms* getEndPlat();
+	
 	void scrollLevel(sf::RenderWindow&);
 	void levelProgression();
 	void changeScrollSpeed(double);
