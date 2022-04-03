@@ -84,35 +84,17 @@ void Level::initLevel()
 		leveldata[x].setPos(xvals.at(x), yvals.at(x));
 		leveldata[x].setType(platTypes.at(x));
 	}
-	
-	
-		itemData = new Item[itemNum];
-		for (int x = 0; x < itemNum; x++)
-		{
-			itemData[x].setPos(iXVals.at(x), iYVals.at(x));
-			itemData[x].setType(iType.at(x));
-		}
-	
-}
-//resets platform (and item) positions to original
-void Level::resetLevel()
-{
-	scrollSpeed = -.25;
-	std::cout << "end:" << platNum << std::endl;
-	for (int x = 0; x < platNum; x++)
-	{
-		leveldata[x].setPos(xvals.at(x), yvals.at(x));
-		
-		//reset broke plat texture
-		sf::IntRect brokePlat(0, 0, 80, 10);
-		if (leveldata[x].getType() == 2)
-			leveldata[x].setTextureRect(brokePlat);
-	}
+	itemData = new Item[itemNum];
 	for (int x = 0; x < itemNum; x++)
 	{
-		leveldata[x].setPos(iXVals.at(x), iYVals.at(x));
+		itemData[x].setPos(iXVals.at(x), iYVals.at(x));
+		itemData[x].setType(iType.at(x));
 	}
+	
+		
+	
 }
+
 
 
 int Level::getPlatNum()
@@ -251,14 +233,65 @@ void Level::levelProgression()
 void Level::loadTexture(std::vector<const sf::Texture*> texts)
 {
 	
+	textureVect = texts;
+
 	for (int x = 0; x < platNum; x++)
 		leveldata[x].setTexture(texts.at(0));
 	
 	for (int x = 0; x < itemNum; x++)
 		itemData[x].setTexture(*texts.at(1));
 
+	setTextures();
 
+	
+}
 
+//resets platform (and item) positions to original
+void Level::resetLevel()
+{
+	scrollSpeed = -.25;
+	delete[] leveldata;
+	delete[] itemData;
+
+	leveldata = new Platforms[platNum];
+	itemData = new Item[itemNum];
+
+	for (int x = 0; x < platNum; x++)
+	{
+		leveldata[x].setPos(xvals.at(x), yvals.at(x));
+		leveldata[x].setSize(length.at(x));
+		leveldata[x].setPos(xvals.at(x), yvals.at(x));
+		leveldata[x].setType(platTypes.at(x));
+
+		//reset broke plat texture
+		sf::IntRect brokePlat(0, 0, 80, 10);
+		if (leveldata[x].getType() == 2)
+			leveldata[x].setTextureRect(brokePlat);
+	}
+	for (int x = 0; x < itemNum; x++)
+	{
+		itemData[x].setPos(iXVals.at(x), iYVals.at(x));
+		itemData[x].setType(iType.at(x));
+	}
+	reLoadTextures();
+	setTextures();
+
+}
+
+//leveldata is deleted and reset, requiring textures to be reloaded using copy of vector created when loading textures
+void Level::reLoadTextures()
+{
+	for (int x = 0; x < platNum; x++)
+		leveldata[x].setTexture(textureVect.at(0));
+
+	for (int x = 0; x < itemNum; x++)
+		itemData[x].setTexture(*textureVect.at(1));
+
+	setTextures();
+}
+
+void Level::setTextures()
+{
 	sf::IntRect basePlat(135, 0, 80, 10);
 	sf::IntRect brokePlat(0, 0, 80, 10);
 	sf::IntRect endPlat(135, 21, 80, 20);

@@ -147,14 +147,14 @@ void Game::runLostMenu()
 {
 	window.clear();
 	window.display();
-	resetLevel(currentLevel+1);
+	resetLevels();
 	delay(500);
 	
 	int choice = menu.lostMenu();
 	switch (choice)
 	{
 	case 4: //play Level Again
-		playLevel(currentLevel+1);
+		playLevel(currentLevel);
 		break;
 	case 5: //return to main menu
 		runLevelMenu();
@@ -173,23 +173,24 @@ void Game::runWonMenu()
 	window.clear();
 	window.display();
 	delay(500);
-	resetLevel(currentLevel);
+	
+	resetLevels();
 	menu.unlockLevel(currentLevel + 1); 
 	int choice = menu.wonMenu();
 	switch (choice)
 	{
-	case 1: //play next level
+	case 7: //play next level
 		window.clear();
 		currentLevel++;
 		choice = 0;
 		
 		playLevel(currentLevel); 
 		break;
-	case 2: //return to main menu
+	case 8: //return to main menu
 		window.clear();
 		runLevelMenu();
 		break;
-	case 3:
+	case 9:
 		window.close();
 		break;
 	default:
@@ -204,10 +205,10 @@ void Game::runLevelMenu()
 	int levelChoice;
 	window.clear();
 	levelChoice = menu.levelMenu();
-	if (levelChoice == 6) //back
+	if (levelChoice == 15) //back
 		runMainMenu();
-	else if (menu.isUnlocked(levelChoice))
-		playLevel(levelChoice);
+	else if (menu.isUnlocked(levelChoice - 9))
+		playLevel(levelChoice - 9);
 }
 
 
@@ -364,8 +365,6 @@ void Game::movement(Level &level)
 		if (!wonLevel && !lostLevel) //game loop
 		{
 			
-			//wonLevel handled in item collision
-			//wonLevel = won(level);
 			lostLevel = loss(level);
 			
 			falling(level);
@@ -428,8 +427,19 @@ void Game::playLevel(int level)
 void Game::resetLevel(int inp)
 {
 	std::cout << "Resetting Level" << inp << std::endl;
+	lostLevel = wonLevel = false;
 	levels[inp - 1].resetLevel();
 	player.setHealth(3);
+}
+
+
+//I took the nuclear approach
+void Game::resetLevels()
+{
+	resetLevel(1);
+	resetLevel(2);
+	resetLevel(3);
+	resetLevel(4);
 }
 
 
