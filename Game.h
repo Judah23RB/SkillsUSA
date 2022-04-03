@@ -66,4 +66,3 @@ private:
 
 	void delay(int);
 };
-

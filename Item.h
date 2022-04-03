@@ -24,4 +24,3 @@ private:
 	int type = 0; //1 is health, 2 is slow, 3 is score
 	sf::Sprite sprite;
 };
-

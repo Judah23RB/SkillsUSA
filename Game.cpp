@@ -53,6 +53,9 @@ void Game::initLevels()
 	levels[2].loadLevel("3");
 	levels[3].loadLevel("4");
 	levels[4].loadLevel("5");
+	//levels[5].loadLevel("6");
+	//levels[6].loadLevel("7");
+	//levels[7].loadLevel("8");
 }
 
 void Game::initTextures()

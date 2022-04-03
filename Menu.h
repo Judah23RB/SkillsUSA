@@ -51,4 +51,3 @@ private:
 	void wonOptions();
 	void lostOptions();
 };
-
