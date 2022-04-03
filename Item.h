@@ -9,7 +9,6 @@ public:
 	
 	void setType(int);
 	void setPos(int, int);
-	
 	void setTexture(const sf::Texture&);
 	void setTextureRect(const sf::IntRect);
 	

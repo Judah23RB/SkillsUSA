@@ -62,6 +62,7 @@ private:
 	bool loss(Level&);
 
 	void resetLevel(int);
+	void resetLevels();
 
 	void delay(int);
 };

@@ -47,6 +47,11 @@ private:
 	Item* itemData = nullptr; //heap array
 	Platforms* endPlat = nullptr;
 
+	std::vector<const sf::Texture*> textureVect;
+
+	void setTextures();
+	void reLoadTextures();
+
 	
 	
 };

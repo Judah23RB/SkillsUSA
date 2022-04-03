@@ -33,6 +33,7 @@ Menu::~Menu()
 
 int Menu::startMenu()
 {
+	mainMenu = true;
 	buttons.clear();
 	screen->clear();
 	startOptions();
@@ -103,6 +104,7 @@ int Menu::inputs()
 
 		screen->display();
 	}
+	buttons.clear();
 	return input;
 }
 
@@ -143,7 +145,7 @@ void Menu::levelOptions()
 	sf::Color unlockedColor(sf::Color::White);
 	const int levelTextSize = 64;
 
-	temp = Button("1", 1, font, buttonShape,levelTextSize);
+	temp = Button("1", 10, font, buttonShape,levelTextSize);
 	temp.setPosition(75, screen->getSize().y / 2 - 50);
 	if (!unlocked[0])
 		temp.setColor(locked);
@@ -152,7 +154,7 @@ void Menu::levelOptions()
 	
 	buttons.push_back(temp);
 
-	temp = Button("2", 2, font, buttonShape,levelTextSize);
+	temp = Button("2",11, font, buttonShape,levelTextSize);
 	temp.setPosition(175, screen->getSize().y / 2 - 50);
 	if (!unlocked[1])
 		temp.setColor(locked);
@@ -160,7 +162,7 @@ void Menu::levelOptions()
 		temp.setColor(unlockedColor);
 	buttons.push_back(temp);
 
-	temp = Button("3", 3, font, buttonShape,levelTextSize);
+	temp = Button("3", 12, font, buttonShape,levelTextSize);
 	temp.setPosition(275, screen->getSize().y / 2 - 50);
 	if (!unlocked[2])
 		temp.setColor(locked);
@@ -168,7 +170,7 @@ void Menu::levelOptions()
 		temp.setColor(unlockedColor);
 	buttons.push_back(temp);
 	
-	temp = Button("4", 4, font, buttonShape,levelTextSize);
+	temp = Button("4", 13, font, buttonShape,levelTextSize);
 	temp.setPosition(375, screen->getSize().y / 2 - 50);
 	if (!unlocked[3])
 		temp.setColor(locked);
@@ -176,7 +178,7 @@ void Menu::levelOptions()
 		temp.setColor(unlockedColor);
 	buttons.push_back(temp);
 
-	temp = Button("5", 5, font, buttonShape,levelTextSize);
+	temp = Button("5", 14, font, buttonShape,levelTextSize);
 	temp.setPosition(475, screen->getSize().y / 2 - 50);
 	if (!unlocked[4])
 		temp.setColor(locked);
@@ -184,7 +186,7 @@ void Menu::levelOptions()
 		temp.setColor(unlockedColor);
 	buttons.push_back(temp);
 
-	temp = Button("Back", 6, font, sf::RectangleShape(sf::Vector2f(80,40)),36);
+	temp = Button("Back", 15, font, sf::RectangleShape(sf::Vector2f(80,40)),36);
 	temp.setPosition(0, 0);
 	temp.setColor(unlockedColor);
 	buttons.push_back(temp);
@@ -197,15 +199,15 @@ void Menu::wonOptions()
 
 	Button temp("", 0, font);
 
-	temp = Button("Next Level", 1, font);
+	temp = Button("Next Level", 7, font);
 	temp.setPosition(100, screen->getSize().y * .25);
 	buttons.push_back(temp);
 
-	temp = Button("Menu", 2, font);
+	temp = Button("Menu", 8, font);
 	temp.setPosition(100, screen->getSize().y  * .5);
 	buttons.push_back(temp);
 
-	temp = Button("Quit", 3, font);
+	temp = Button("Quit", 9, font);
 	temp.setPosition(100, screen->getSize().y * .75);
 	buttons.push_back(temp);
 
