@@ -51,8 +51,5 @@ private:
 
 	void setTextures();
 	void reLoadTextures();
-
-	
-	
 };
 

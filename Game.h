@@ -70,4 +70,3 @@ private:
 
 	void delay(int);
 };
-
