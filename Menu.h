@@ -12,6 +12,8 @@ public:
 
 	void setWindow(sf::RenderWindow&);
 
+	//Utility
+	void clearOptions();
 
 	//menus
 	int startMenu();
@@ -41,11 +43,11 @@ public:
 
 private:
 	std::vector<Button> buttons;
-	bool unlocked[5] = {true,true,true,true,false};
-	int scores[5] = { 0,0,0,0,0 }; //compared to and updated by load scores
+	bool unlocked[8] = { true,false,false,false,false,false,false,false };
+	int scores[8] = { 0,0,0,0,0,0,0,0 }; //compared to and updated by load scores
 	sf::RenderWindow* screen = nullptr;
 	sf::Font font;
-	sf::Text title;
+	sf::Text title, win, lose;
 	sf::Sprite* background = nullptr;
 	sf::Sprite scoreStars;
 

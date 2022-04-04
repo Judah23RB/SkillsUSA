@@ -53,12 +53,7 @@ void Level::loadLevel(std::string num)
 	{
 		platNum++;
 		//std::cout << x << std::endl;
-		
 	}
-	std::cout <<"Start:" << platNum << std::endl;
-	
-	
-	
 	initLevel();
 	
 }
@@ -184,12 +179,13 @@ bool Level::itemCollision(sf::FloatRect p, int& itemType)
 				itemData[x].clearSprite();
 				return true;
 				break;
-			default:
+			
 			case 4:
 				itemType = 4;
 				itemData[x].clearSprite();
 				return true;
 				break;
+			default:
 				break;
 			}
 		}

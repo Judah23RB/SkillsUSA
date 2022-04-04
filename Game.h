@@ -40,14 +40,13 @@ private:
 	sf::Text win, lose;
 	sf::Clock fallClock, gameClock;
 	sf::SoundBuffer* soundbuffer = nullptr;
-	sf::Music menuMusic, gameMusic;
 
 	Menu menu;
 	Player player;
 	
-	Level levels[5];
-	int levelScores[5] = { 0,0,0,0,0 }; //loads in raw time values
-	int scoreStarsArr[5] = { 0,0,0,0,0 }; //uses levelScores, accounts for 0 not completed, 1 bronze, 2 silver, 3 gold
+	Level levels[8];
+	int levelScores[8] = { 0,0,0,0,0,0,0,0 }; //loads in raw time values
+	int scoreStarsArr[8] = { 0,0,0,0,0,0,0,0 }; //uses levelScores, accounts for 0 not completed, 1 bronze, 2 silver, 3 gold
 
 	std::vector<sf::Sound> sounds; //0 is score, 1 is health, 2 is slow fall, 3 is fall damage, 4 is win, 5 is lose
 	std::vector<const sf::Texture*> levelTexts; //holds pointers to sprite sheets needed for level

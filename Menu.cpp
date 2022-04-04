@@ -22,6 +22,11 @@ void Menu::setWindow(sf::RenderWindow& window)
 	screen = &window;
 }
 
+void Menu::clearOptions()
+{
+	buttons.clear();
+}
+
 void Menu::loadBackground(sf::Sprite& image)
 {
 	background = &image;
@@ -30,6 +35,7 @@ void Menu::loadBackground(sf::Sprite& image)
 void Menu::loadScoreSheet(sf::Texture* textptr)
 {
 	scoreStars.setTexture(*textptr);
+	scoreStars.setScale(2, 2);
 }
 Menu::~Menu()
 {
@@ -158,7 +164,7 @@ void Menu::levelOptions()
 	const int levelTextSize = 64;
 
 	temp = Button("1", 10, font, buttonShape,levelTextSize);
-	temp.setPosition(75, screen->getSize().y / 2 - 50);
+	temp.setPosition(125, screen->getSize().y / 2 - 100);
 	if (!unlocked[0])
 		temp.setColor(locked);
 	else
@@ -167,7 +173,7 @@ void Menu::levelOptions()
 	buttons.push_back(temp);
 
 	temp = Button("2",11, font, buttonShape,levelTextSize);
-	temp.setPosition(175, screen->getSize().y / 2 - 50);
+	temp.setPosition(225, screen->getSize().y / 2 - 100);
 	if (!unlocked[1])
 		temp.setColor(locked);
 	else
@@ -175,7 +181,7 @@ void Menu::levelOptions()
 	buttons.push_back(temp);
 
 	temp = Button("3", 12, font, buttonShape,levelTextSize);
-	temp.setPosition(275, screen->getSize().y / 2 - 50);
+	temp.setPosition(325, screen->getSize().y / 2 - 100);
 	if (!unlocked[2])
 		temp.setColor(locked);
 	else
@@ -183,7 +189,7 @@ void Menu::levelOptions()
 	buttons.push_back(temp);
 	
 	temp = Button("4", 13, font, buttonShape,levelTextSize);
-	temp.setPosition(375, screen->getSize().y / 2 - 50);
+	temp.setPosition(425, screen->getSize().y / 2 - 100);
 	if (!unlocked[3])
 		temp.setColor(locked);
 	else
@@ -191,14 +197,39 @@ void Menu::levelOptions()
 	buttons.push_back(temp);
 
 	temp = Button("5", 14, font, buttonShape,levelTextSize);
-	temp.setPosition(475, screen->getSize().y / 2 - 50);
+	temp.setPosition(125, screen->getSize().y / 2  + 200);
+	if (!unlocked[4])
+		temp.setColor(locked);
+	else
+		temp.setColor(unlockedColor);
+	buttons.push_back(temp);
+	
+	temp = Button("6", 15, font, buttonShape, levelTextSize);
+	temp.setPosition(225, screen->getSize().y / 2 + 200);
 	if (!unlocked[4])
 		temp.setColor(locked);
 	else
 		temp.setColor(unlockedColor);
 	buttons.push_back(temp);
 
-	temp = Button("Back", 15, font, sf::RectangleShape(sf::Vector2f(80,40)),36);
+	temp = Button("7", 16, font, buttonShape, levelTextSize);
+	temp.setPosition(325, screen->getSize().y / 2 + 200);
+	if (!unlocked[4])
+		temp.setColor(locked);
+	else
+		temp.setColor(unlockedColor);
+	buttons.push_back(temp);
+
+	temp = Button("8", 17, font, buttonShape, levelTextSize);
+	temp.setPosition(425, screen->getSize().y / 2 + 200);
+	if (!unlocked[4])
+		temp.setColor(locked);
+	else
+		temp.setColor(unlockedColor);
+	buttons.push_back(temp);
+	
+	
+	temp = Button("Back", 18, font, sf::RectangleShape(sf::Vector2f(80,40)),36);
 	temp.setPosition(0, 0);
 	temp.setColor(unlockedColor);
 	buttons.push_back(temp);
@@ -259,7 +290,7 @@ void Menu::unlockLevel(int level)
 
 void Menu::loadScores(int scoreArr[])
 {
-	for (int x = 0; x < 4; x++) //change to levnum - 1
+	for (int x = 0; x < 8; x++) //change to levnum - 1
 	{
 		if (scoreArr[x] > scores[x])
 			scores[x] = scoreArr[x];
@@ -272,8 +303,10 @@ void Menu::loadScores(int scoreArr[])
 //draw sprite above each level button
 void Menu::displayScores()
 {
-	sf::Sprite lev[4];
-	lev[0] = lev[1] = lev[2] = lev[3] = scoreStars;
+	sf::Sprite lev[8];
+	
+	for (int x = 0; x < 8; x++)
+		lev[x] = scoreStars;
 
 	
 	sf::IntRect starsNo(7,3,35,14);
@@ -281,12 +314,16 @@ void Menu::displayScores()
 	sf::IntRect stars2(7,42,35,14);
 	sf::IntRect stars3(7,62,35,14);
 
-	lev[0].setPosition(75, screen->getSize().y / 2 - 75);
-	lev[1].setPosition(175, screen->getSize().y / 2 - 75);
-	lev[2].setPosition(275, screen->getSize().y / 2 - 75);
-	lev[3].setPosition(375, screen->getSize().y / 2 - 75);
+	lev[0].setPosition(125, screen->getSize().y / 2 - 125);
+	lev[1].setPosition(225, screen->getSize().y / 2 - 125);
+	lev[2].setPosition(325, screen->getSize().y / 2 - 125);
+	lev[3].setPosition(425, screen->getSize().y / 2 - 125);
+	lev[4].setPosition(125, screen->getSize().y / 2 + 150);
+	lev[5].setPosition(225, screen->getSize().y / 2 + 150);
+	lev[6].setPosition(325, screen->getSize().y / 2 + 150);
+	lev[7].setPosition(425, screen->getSize().y / 2 + 150);
 
-	for (int x = 0; x < 4; x++)
+	for (int x = 0; x < 8; x++)
 	{
 		if (scores[x] == 0)
 			lev[x].setTextureRect(starsNo);
@@ -298,8 +335,35 @@ void Menu::displayScores()
 			lev[x].setTextureRect(stars3);
 	}
 
-	for (int x = 0; x < 4; x++)
+	for (int x = 0; x < 8; x++)
 		screen->draw(lev[x]);
+}
+
+void Menu::gameOverAnimation(bool result)
+{
+	win.setFont(font);
+	lose.setFont(font);
+
+	win.setFillColor(sf::Color::Green);
+	lose.setFillColor(sf::Color::Red);
+
+	win.setString("YOU WIN!");
+	lose.setString("YOU LOSE");
+
+	win.setCharacterSize(80);
+	lose.setCharacterSize(80);
+
+	win.setOrigin(win.getCharacterSize() / 2, win.getCharacterSize() / 2);
+	lose.setOrigin(lose.getCharacterSize() / 2, lose.getCharacterSize() / 2);
+
+	win.setPosition(200, 400);
+	lose.setPosition(200, 400);
+
 	
-	
+	screen->draw(*background);
+	if (result)
+		screen->draw(win);
+	else
+		screen->draw(lose);
+	screen->display();
 }

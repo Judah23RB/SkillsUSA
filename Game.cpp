@@ -15,23 +15,7 @@ Game::Game()
 	menu.setWindow(window);
 	
 	
-	win.setFont(font);
-	lose.setFont(font);
 	
-	win.setFillColor(sf::Color::Green);
-	lose.setFillColor(sf::Color::Red);
-	
-	win.setString("YOU WIN!");
-	lose.setString("YOU LOSE");
-	
-	win.setCharacterSize(80);
-	lose.setCharacterSize(80);
-	
-	win.setOrigin(win.getCharacterSize() / 2, win.getCharacterSize() / 2);
-	lose.setOrigin(lose.getCharacterSize() / 2, lose.getCharacterSize() / 2);
-	
-	win.setPosition(200, 400);
-	lose.setPosition(200, 400);
 }
 
 Game::~Game()
@@ -53,9 +37,9 @@ void Game::initLevels()
 	levels[2].loadLevel("3");
 	levels[3].loadLevel("4");
 	levels[4].loadLevel("5");
-	//levels[5].loadLevel("6");
-	//levels[6].loadLevel("7");
-	//levels[7].loadLevel("8");
+	levels[5].loadLevel("6");
+	levels[6].loadLevel("7");
+	levels[7].loadLevel("8");
 }
 
 void Game::initTextures()
@@ -114,22 +98,41 @@ void Game::initTextures()
 	levels[2].loadTexture(levelTexts);
 	levels[3].loadTexture(levelTexts);
 	levels[4].loadTexture(levelTexts);
-}
+	levels[5].loadTexture(levelTexts);
+	levels[7].loadTexture(levelTexts);
+	levels[6].loadTexture(levelTexts);
 
+}
+//0 is score, 1 is health, 2 is slow fall, 3 is fall damage, 4, is win, 5 is lose
 void Game::initSounds()
 {
-	if (!gameMusic.openFromFile("AudioFiles/GameMusic.ogg"))
-		std::cout << "Error loading game Music" << std::endl;
+	soundbuffer = new sf::SoundBuffer[6];
+	if (!soundbuffer[0].loadFromFile("AudioFiles/Score.wav"))
+		std::cout << "Error loading score sound"<<std::endl;
+	if (!soundbuffer[1].loadFromFile("AudioFiles/Health.wav"))
+		std::cout << "Error loading health sound" << std::endl;
+	if (!soundbuffer[2].loadFromFile("AudioFiles/Slow_fall.wav"))
+		std::cout << "Error loading slowfall sound" << std::endl;
+	if (!soundbuffer[3].loadFromFile("AudioFiles/Fall_Damage.wav"))
+		std::cout << "Error loading fall damage sound" << std::endl;
+	if (!soundbuffer[4].loadFromFile("AudioFiles/Win.wav"))
+		std::cout << "Error loading win sound" << std::endl;
+	if (!soundbuffer[5].loadFromFile("AudioFiles/Lose.wav"))
+		std::cout << "Error loading lose sound" << std::endl;
 
-	if (!menuMusic.openFromFile("AudioFiles/GameMusic.ogg"))
-		std::cout << "Error loading Menu music" << std::endl;
+	for (int x = 0; x < 6; x++)
+	{
+		sf::Sound temp;
+		temp.setBuffer(soundbuffer[x]);
+		sounds.push_back(temp);
+	}
+	
 
 }
 
 void Game::runMainMenu()
 {
 	int choice = NULL;
-	int levelChoice;
 	choice = menu.startMenu();
 	switch (choice)
 	{
@@ -183,6 +186,7 @@ void Game::runWonMenu()
 	
 	resetLevels();
 	menu.unlockLevel(currentLevel + 1); 
+	
 	int choice = menu.wonMenu();
 	switch (choice)
 	{
@@ -190,10 +194,10 @@ void Game::runWonMenu()
 		window.clear();
 		currentLevel++;
 		choice = 0;
-		
 		playLevel(currentLevel); 
 		break;
 	case 8: //return to main menu
+		std::cout << "returning to menu" << std::endl;
 		window.clear();
 		runLevelMenu();
 		break;
@@ -203,19 +207,22 @@ void Game::runWonMenu()
 	default:
 		break;
 	}
-	//window.display();
 }
 
 
 void Game::runLevelMenu()
 {
 	int levelChoice;
+	menu.clearOptions();
 	window.clear();
 	levelChoice = menu.levelMenu();
-	if (levelChoice == 15) //back
+	if (levelChoice == 18) //back
 		runMainMenu();
 	else if (menu.isUnlocked(levelChoice - 9))
+	{
 		playLevel(levelChoice - 9);
+		currentLevel = levelChoice - 9;
+	}
 }
 
 
@@ -281,11 +288,20 @@ void Game::falling(Level &level)
 			
 			//checks to see how long player has been falling
 			if (fallClock.getElapsedTime().asSeconds() > 1.25)
+			{
+				sounds.at(3).play();
 				player.updateHealth(-1); //minor damage
+			}
 			else if (fallClock.getElapsedTime().asSeconds() > 2)
+			{
+				sounds.at(3).play();
 				player.updateHealth(-2); //major damage
+			}
 			else if (fallClock.getElapsedTime().asSeconds() > 2.5)
+			{
+				sounds.at(3).play();
 				player.updateHealth(-3); //auto kills
+			}
 
 			
 			
@@ -343,16 +359,20 @@ void Game::itemCollision(Level& level, int levNum)
 		switch (item)
 		{
 		case 1:
+			sounds.at(0).play();
 			levelScores[levNum - 1] += 100;
 			break;
 		case 2:
+			sounds.at(1).play();
 			if (player.getHealth() != 3)
 				player.updateHealth(1);
 			break;
 		case 3:
+			sounds.at(3).play();
 			level.changeScrollSpeed(level.getScrollSpeed() + .025);
 			break;
 		case 4:
+			sounds.at(4).play();
 			wonLevel = true;
 			break;
 
@@ -372,9 +392,7 @@ void Game::movement(Level &level)
 	{
 		if (!wonLevel && !lostLevel) //game loop
 		{
-			
 			lostLevel = loss(level);
-	
 			falling(level);
 			player.moveInput(fallState, level.getScrollSpeed());
 			player.updateAnimations();
@@ -382,28 +400,21 @@ void Game::movement(Level &level)
 			window.clear();
 			drawSprites(level);
 			window.display();
-			//gameMusic.play();
 		}
 		else if (wonLevel) //won menu
 		{
 			updateLevelScores();
 			window.clear();
-			window.draw(backgroundImage);
-			window.draw(win);
-			window.display();
-			//gameMusic.stop();
+			menu.gameOverAnimation(wonLevel);
 			delay(500);
 			runWonMenu();
 
 		}
 		else if (lostLevel) //loss menu
 		{
-			
+			sounds.at(5).play();
 			window.clear();
-			window.draw(backgroundImage);
-			window.draw(lose);
-			window.display();
-			//gameMusic.stop();
+			menu.gameOverAnimation(wonLevel);
 			delay(500);
 			runLostMenu();
 		}
@@ -434,7 +445,6 @@ void Game::playLevel(int level)
 
 void Game::resetLevel(int inp)
 {
-	std::cout << "Resetting Level" << inp << std::endl;
 	lostLevel = wonLevel = false;
 	levels[inp - 1].resetLevel();
 	player.setHealth(3);
@@ -455,6 +465,7 @@ void Game::resetLevels()
 void Game::updateLevelScores()
 {
 	//replace with relevant completion times for each level
+	std::cout << currentLevel << std::endl;
 	switch (currentLevel - 1)
 	{
 	case 0:
@@ -501,7 +512,7 @@ void Game::updateLevelScores()
 		break;
 
 	}
-	
+	gameClock.restart();
 	//include health as part of calculation
 	switch (player.getHealth())
 	{
