@@ -34,8 +34,8 @@ private:
 	//Physics
 	sf::Vector2f velocity;
 	float accel, drag, maxVelocity, maxfallVelocity, minVelocity, gravity, yMaxVelocity;
-	int lMoveSpeed = -1;
-	int rMoveSpeed = 1;
+	double lMoveSpeed = -1;
+	double rMoveSpeed = 1;
 	
 	//animation
 	int currentState = animState::idle;

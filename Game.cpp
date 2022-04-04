@@ -67,17 +67,21 @@ void Game::initTextures()
 		std::cout << "Error loading Player Texture" << std::endl;
 
 	if (!itemSheet.loadFromFile("Sprites/ItemSheet.png"))
-		std::cout << "Error loading Player Texture" << std::endl;
+		std::cout << "Error loading Item Texture" << std::endl;
 
 	if (!healthSheet.loadFromFile("Sprites/Hearts.png"))
 		std::cout << "Error loading Hearts Texture" << std::endl;
+
+	if (!scoreSheet.loadFromFile("Sprites/stars.png"))
+		std::cout << "Error loading score stars texture" << std::endl;
 
 	playerImage.createMaskFromColor(sf::Color(255, 255, 255), 0); //needed to make texture background transparant
 
 
 	backgroundImage.setTexture(background);
 	menu.loadBackground(backgroundImage);
-
+	sf::Texture* scoreTextPtr = &scoreSheet;
+	menu.loadScoreSheet(scoreTextPtr);
 	
 	
 	//holds platforms
@@ -257,7 +261,7 @@ void Game::falling(Level &level)
 	if(!loss(level))
 	{
 		updateHealth();
-		itemCollision(level); //independent of player physics
+		itemCollision(level,currentLevel); //independent of player physics
 		player.horizMoveModifier(0); //resets player movement speed
 							  
 		// if in bounds and not colliding, player falls as window scrolls
@@ -328,7 +332,7 @@ void Game::falling(Level &level)
 	}
 }
 //handles player and game impact of item collision
-void Game::itemCollision(Level& level)
+void Game::itemCollision(Level& level, int levNum)
 {
 	int item = 0;
 	if (level.itemCollision(player.getPlayerBounds(), item))
@@ -336,7 +340,7 @@ void Game::itemCollision(Level& level)
 		switch (item)
 		{
 		case 1:
-			score += 100;
+			levelScores[levNum - 1] += 100;
 			break;
 		case 2:
 			if (player.getHealth() != 3)
@@ -359,6 +363,7 @@ void Game::itemCollision(Level& level)
 //losing resets the current level
 void Game::movement(Level &level)
 {
+	gameClock.restart();
 	lostLevel = wonLevel = false;
 	while (window.isOpen())
 	{
@@ -366,7 +371,7 @@ void Game::movement(Level &level)
 		{
 			
 			lostLevel = loss(level);
-			
+	
 			falling(level);
 			player.moveInput(fallState, level.getScrollSpeed());
 			player.updateAnimations();
@@ -378,12 +383,12 @@ void Game::movement(Level &level)
 		}
 		else if (wonLevel) //won menu
 		{
-			
+			updateLevelScores();
 			window.clear();
 			window.draw(backgroundImage);
 			window.draw(win);
 			window.display();
-			
+			//gameMusic.stop();
 			delay(500);
 			runWonMenu();
 
@@ -395,7 +400,7 @@ void Game::movement(Level &level)
 			window.draw(backgroundImage);
 			window.draw(lose);
 			window.display();
-			
+			//gameMusic.stop();
 			delay(500);
 			runLostMenu();
 		}
@@ -442,6 +447,128 @@ void Game::resetLevels()
 	resetLevel(4);
 }
 
+//takes into account completion time and health to assign score
+//score items affect score in separate function
+void Game::updateLevelScores()
+{
+	//replace with relevant completion times for each level
+	switch (currentLevel - 1)
+	{
+	case 0:
+		if (gameClock.getElapsedTime().asSeconds() < 10)
+			levelScores[currentLevel - 1] += 1000;
+		if (gameClock.getElapsedTime().asSeconds() < 12)
+			levelScores[currentLevel - 1] += 750;
+		if (gameClock.getElapsedTime().asSeconds() < 15)
+			levelScores[currentLevel - 1] += 500;
+		break;
+	case 1:
+		if (gameClock.getElapsedTime().asSeconds() < 10)
+			levelScores[currentLevel - 1] += 1000;
+		if (gameClock.getElapsedTime().asSeconds() < 12)
+			levelScores[currentLevel - 1] += 750;
+		if (gameClock.getElapsedTime().asSeconds() < 15)
+			levelScores[currentLevel - 1] += 500;
+		break;
+	case 2: 
+		if (gameClock.getElapsedTime().asSeconds() < 10)
+			levelScores[currentLevel - 1] += 1000;
+		if (gameClock.getElapsedTime().asSeconds() < 12)
+			levelScores[currentLevel - 1] += 750;
+		if (gameClock.getElapsedTime().asSeconds() < 15)
+			levelScores[currentLevel - 1] += 500;
+		break;
+	case 3:
+		if (gameClock.getElapsedTime().asSeconds() < 10)
+			levelScores[currentLevel - 1] += 1000;
+		if (gameClock.getElapsedTime().asSeconds() < 12)
+			levelScores[currentLevel - 1] += 750;
+		if (gameClock.getElapsedTime().asSeconds() < 15)
+			levelScores[currentLevel - 1] += 500;
+		break;
+	case 4:
+		if (gameClock.getElapsedTime().asSeconds() < 10)
+			levelScores[currentLevel - 1] += 1000;
+		if (gameClock.getElapsedTime().asSeconds() < 12)
+			levelScores[currentLevel - 1] += 750;
+		if (gameClock.getElapsedTime().asSeconds() < 15)
+			levelScores[currentLevel - 1] += 500;
+		break;
+	default:
+		break;
+
+	}
+	
+	//include health as part of calculation
+	switch (player.getHealth())
+	{
+	case 3:
+		break;
+	case 2:
+		levelScores[currentLevel - 1] -= 100;
+		break;
+	case 1:
+		levelScores[currentLevel - 1] -= 300;
+		break;
+	case 0:
+		levelScores[currentLevel - 1] = 0;
+		break;
+	default:
+		break;
+	}
+
+	convertLevelScores();
+}
+
+
+//converts scores to score stars for display in menu
+void Game::convertLevelScores()
+{
+	//hard coded to account for item impact
+	switch (currentLevel - 1)
+	{
+	case 0:
+		if (levelScores[0] >= 1000)
+			scoreStarsArr[0] = 3;
+		else if (levelScores[0] > 750)
+			scoreStarsArr[0] = 2;
+		else
+			scoreStarsArr[0] = 1;
+	case 1:
+		if (levelScores[1] >= 1000)
+			scoreStarsArr[1] = 3;
+		else if (levelScores[1] > 750)
+			scoreStarsArr[1] = 2;
+		else
+			scoreStarsArr[1] = 1;
+	case 2:
+		if (levelScores[2] >= 1100)
+			scoreStarsArr[2] = 3;
+		else if (levelScores[2] > 850)
+			scoreStarsArr[2] = 2;
+		else
+			scoreStarsArr[2] = 1;
+	case 3:
+		if (levelScores[3] >= 1200)
+			scoreStarsArr[3] = 3;
+		else if (levelScores[3] > 950)
+			scoreStarsArr[3] = 2;
+		else
+			scoreStarsArr[3] = 1;
+	case 4:
+		break;
+	default:
+		break;
+	}
+	
+	
+	for (int x = 0; x < 4; x++) //change to 5 when final level is loaded in
+	{
+		if (levelScores[x] == 0)
+			scoreStarsArr[x] = 0;
+	}
+	menu.loadScores(scoreStarsArr);
+}
 
 void Game::delay(int inp)
 {

@@ -26,6 +26,11 @@ void Menu::loadBackground(sf::Sprite& image)
 {
 	background = &image;
 }
+
+void Menu::loadScoreSheet(sf::Texture* textptr)
+{
+	scoreStars.setTexture(*textptr);
+}
 Menu::~Menu()
 {
 
@@ -34,6 +39,7 @@ Menu::~Menu()
 int Menu::startMenu()
 {
 	mainMenu = true;
+	levMenu = false;
 	buttons.clear();
 	screen->clear();
 	startOptions();
@@ -42,6 +48,7 @@ int Menu::startMenu()
 
 int Menu::levelMenu()
 {
+	levMenu = true;
 	mainMenu = false;
 	screen->clear();
 	levelOptions();
@@ -59,6 +66,7 @@ int Menu::settingsMenu()
 int Menu::wonMenu()
 {
 	mainMenu = false;
+	levMenu = false;
 	screen->clear();
 	wonOptions();
 	return inputs();
@@ -67,6 +75,7 @@ int Menu::wonMenu()
 int Menu::lostMenu()
 {
 	mainMenu = false;
+	levMenu = false;
 	screen->clear();
 	lostOptions();
 	return inputs();
@@ -84,6 +93,9 @@ int Menu::inputs()
 		
 		if (mainMenu)
 			screen->draw(title);
+
+		if (levMenu)
+			displayScores();
 		
 		for (auto i : buttons)
 			screen->draw(i);
@@ -243,4 +255,51 @@ bool Menu::isUnlocked(int level)
 void Menu::unlockLevel(int level)
 {
 	unlocked[level - 1] = true;
+}
+
+void Menu::loadScores(int scoreArr[])
+{
+	for (int x = 0; x < 4; x++) //change to levnum - 1
+	{
+		if (scoreArr[x] > scores[x])
+			scores[x] = scoreArr[x];
+	}
+}
+
+
+
+//set sprite texture depending on value of scores
+//draw sprite above each level button
+void Menu::displayScores()
+{
+	sf::Sprite lev[4];
+	lev[0] = lev[1] = lev[2] = lev[3] = scoreStars;
+
+	
+	sf::IntRect starsNo(7,3,35,14);
+	sf::IntRect stars1(7,23,35,14);
+	sf::IntRect stars2(7,42,35,14);
+	sf::IntRect stars3(7,62,35,14);
+
+	lev[0].setPosition(75, screen->getSize().y / 2 - 75);
+	lev[1].setPosition(175, screen->getSize().y / 2 - 75);
+	lev[2].setPosition(275, screen->getSize().y / 2 - 75);
+	lev[3].setPosition(375, screen->getSize().y / 2 - 75);
+
+	for (int x = 0; x < 4; x++)
+	{
+		if (scores[x] == 0)
+			lev[x].setTextureRect(starsNo);
+		if (scores[x] == 1)
+			lev[x].setTextureRect(stars1);
+		if (scores[x] == 2)
+			lev[x].setTextureRect(stars2);
+		if (scores[x] == 3)
+			lev[x].setTextureRect(stars3);
+	}
+
+	for (int x = 0; x < 4; x++)
+		screen->draw(lev[x]);
+	
+	
 }
