@@ -85,9 +85,6 @@ void Level::initLevel()
 		itemData[x].setPos(iXVals.at(x), iYVals.at(x));
 		itemData[x].setType(iType.at(x));
 	}
-	
-		
-	
 }
 
 
