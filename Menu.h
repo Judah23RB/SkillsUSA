@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 #include "Button.h"
 #include <vector>
 class Menu
@@ -26,8 +25,6 @@ public:
 	void loadBackground(sf::Sprite&);
 	void loadScoreSheet(sf::Texture*);
 
-	//Music!!!!
-	void loadMusic(sf::Music&);
 	
 	//Animations
 	void startAnimation();

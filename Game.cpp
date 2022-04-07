@@ -17,7 +17,7 @@ Game::Game()
 
 Game::~Game()
 {
-
+	delete[] soundbuffer;
 }
 
 void Game::initWindow()
@@ -357,19 +357,23 @@ void Game::itemCollision(Level& level, int levNum)
 		{
 		case 1:
 			sounds.at(0).play();
+			sf::sleep(soundDelay);
 			levelScores[levNum - 1] += 100;
 			break;
 		case 2:
 			sounds.at(1).play();
+			sf::sleep(soundDelay);
 			if (player.getHealth() != 3)
 				player.updateHealth(1);
 			break;
 		case 3:
 			sounds.at(3).play();
+			sf::sleep(soundDelay);
 			level.changeScrollSpeed(level.getScrollSpeed() + .025);
 			break;
 		case 4:
 			sounds.at(4).play();
+			sf::sleep(soundDelay);
 			wonLevel = true;
 			break;
 
@@ -410,6 +414,7 @@ void Game::movement(Level &level)
 		else if (lostLevel) //loss menu
 		{
 			sounds.at(5).play();
+			sf::sleep(soundDelay);
 			window.clear();
 			menu.gameOverAnimation(wonLevel);
 			delay(500);

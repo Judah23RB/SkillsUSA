@@ -39,7 +39,9 @@ private:
 	sf::Sprite backgroundImage, health, scores;
 	sf::Text win, lose;
 	sf::Clock fallClock, gameClock;
+	
 	sf::SoundBuffer* soundbuffer = nullptr;
+	sf::Time soundDelay = sf::seconds(.1);
 
 	Menu menu;
 	Player player;
