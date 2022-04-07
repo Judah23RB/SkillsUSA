@@ -13,9 +13,6 @@ Game::Game()
 		std::cout << "Error loading font" << std::endl;
 	
 	menu.setWindow(window);
-	
-	
-	
 }
 
 Game::~Game()
