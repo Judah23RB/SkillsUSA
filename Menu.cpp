@@ -46,6 +46,7 @@ int Menu::startMenu()
 {
 	mainMenu = true;
 	levMenu = false;
+	settingMenu = false;
 	buttons.clear();
 	screen->clear();
 	startOptions();
@@ -56,23 +57,28 @@ int Menu::levelMenu()
 {
 	levMenu = true;
 	mainMenu = false;
+	settingMenu = true;
 	screen->clear();
 	levelOptions();
 	return inputs();
 }
-/*
+
 int Menu::settingsMenu()
 {
+	levMenu = false;
+	mainMenu = false;
+	settingMenu = true;
 	screen->clear();
 	settingsOptions();
 	return inputs();
 }
-*/
+
 
 int Menu::wonMenu()
 {
 	mainMenu = false;
 	levMenu = false;
+	settingMenu = false;
 	screen->clear();
 	wonOptions();
 	return inputs();
@@ -82,6 +88,7 @@ int Menu::lostMenu()
 {
 	mainMenu = false;
 	levMenu = false;
+	settingMenu = false;
 	screen->clear();
 	lostOptions();
 	return inputs();
@@ -102,6 +109,9 @@ int Menu::inputs()
 
 		if (levMenu)
 			displayScores();
+
+		if (settingMenu)
+			screen->draw(settings);
 		
 		for (auto i : buttons)
 			screen->draw(i);
@@ -276,6 +286,45 @@ void Menu::lostOptions()
 	buttons.push_back(temp);
 }
 
+void Menu::settingsOptions()
+{
+	settings.setFont(font);
+	settings.setCharacterSize(64);
+	settings.setString("SFX");
+	settings.setPosition(300, screen->getSize().y * .25);
+	
+	buttons.clear();
+	screen->clear();
+
+	Button temp("", 0, font);
+
+	temp = Button("0", 19, font);
+	temp.setPosition(100, screen->getSize().y * .5);
+	buttons.push_back(temp);
+
+	temp = Button("25", 20, font);
+	temp.setPosition(200, screen->getSize().y * .5);
+	buttons.push_back(temp);
+
+	temp = Button("50", 21, font);
+	temp.setPosition(300, screen->getSize().y * .5);
+	buttons.push_back(temp);
+
+	temp = Button("75", 22, font);
+	temp.setPosition(400, screen->getSize().y * .5);
+	buttons.push_back(temp);
+
+	temp = Button("100", 23, font);
+	temp.setPosition(500, screen->getSize().y * .5);
+	buttons.push_back(temp);
+
+	temp = Button("Back", 24, font, sf::RectangleShape(sf::Vector2f(80, 40)), 36);
+	temp.setPosition(0, 0);
+	buttons.push_back(temp);
+
+	
+}
+
 bool Menu::isUnlocked(int level)
 {
 	if (unlocked[level - 1])
@@ -318,10 +367,10 @@ void Menu::displayScores()
 	lev[1].setPosition(225, screen->getSize().y / 2 - 125);
 	lev[2].setPosition(325, screen->getSize().y / 2 - 125);
 	lev[3].setPosition(425, screen->getSize().y / 2 - 125);
-	lev[4].setPosition(125, screen->getSize().y / 2 + 150);
-	lev[5].setPosition(225, screen->getSize().y / 2 + 150);
-	lev[6].setPosition(325, screen->getSize().y / 2 + 150);
-	lev[7].setPosition(425, screen->getSize().y / 2 + 150);
+	lev[4].setPosition(125, screen->getSize().y / 2 + 175);
+	lev[5].setPosition(225, screen->getSize().y / 2 + 175);
+	lev[6].setPosition(325, screen->getSize().y / 2 + 175);
+	lev[7].setPosition(425, screen->getSize().y / 2 + 175);
 
 	for (int x = 0; x < 8; x++)
 	{

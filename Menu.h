@@ -44,12 +44,13 @@ private:
 	int scores[8] = { 0,0,0,0,0,0,0,0 }; //compared to and updated by load scores
 	sf::RenderWindow* screen = nullptr;
 	sf::Font font;
-	sf::Text title, win, lose;
+	sf::Text title, win, lose, settings;
 	sf::Sprite* background = nullptr;
 	sf::Sprite scoreStars;
 
 	bool mainMenu = false; //used for displaying title
 	bool levMenu = false; //used for displaying level scores
+	bool settingMenu = false; //used for settings text
 
 	int inputs();
 	void startOptions();

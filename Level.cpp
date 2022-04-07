@@ -197,6 +197,13 @@ bool Level::itemCollision(sf::FloatRect p, int& itemType)
 void Level::scrollLevel(sf::RenderWindow &w)
 {
 	levelProgression();
+	
+	if (slowItem)
+	{
+		scrollSpeed += .1;
+		slowItem = false;
+	}
+	
 	for (int x = 0; x < platNum; x++)
 		leveldata[x].scroll(scrollSpeed);
 	for (int x = 0; x < itemNum; x++)
@@ -219,13 +226,16 @@ void Level::levelProgression()
 		changeScrollSpeed(-.75);
 }
 
+void Level::slowItemEffect()
+{
+	slowItem = true;
+}
 
 //0 is platforms, 1 items, in texts vector
 //1 is basic, 2 is fake, 3 is tread R, 4 is tread L, 5 is spike, 6 is end for PLATFORMS
 //1 is score, 2 is health, 3 is slow Fall, 4 is end Flag
 void Level::loadTexture(std::vector<const sf::Texture*> texts)
 {
-	
 	textureVect = texts;
 
 	for (int x = 0; x < platNum; x++)
@@ -235,8 +245,6 @@ void Level::loadTexture(std::vector<const sf::Texture*> texts)
 		itemData[x].setTexture(*texts.at(1));
 
 	setTextures();
-
-	
 }
 
 //resets platform (and item) positions to original

@@ -31,12 +31,15 @@ public:
 	void scrollLevel(sf::RenderWindow&);
 	void levelProgression();
 	void changeScrollSpeed(double);
+	void slowItemEffect();
 
 	double getScrollSpeed(); // used for collision
 private:
+	
 	int platNum = 0;
 	int itemNum = 0;
 	double scrollSpeed = -.25;
+	bool slowItem = false;
 	bool noItems = false;
 	std::string levNum; // reading in data
 	

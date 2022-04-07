@@ -14,8 +14,6 @@ Game::Game()
 	
 	menu.setWindow(window);
 	
-	
-	
 }
 
 Game::~Game()
@@ -93,14 +91,15 @@ void Game::initTextures()
 	
 	
 	//will eventually load all textures in same way
+
 	levels[0].loadTexture(levelTexts);
 	levels[1].loadTexture(levelTexts);
 	levels[2].loadTexture(levelTexts);
 	levels[3].loadTexture(levelTexts);
 	levels[4].loadTexture(levelTexts);
 	levels[5].loadTexture(levelTexts);
-	levels[7].loadTexture(levelTexts);
 	levels[6].loadTexture(levelTexts);
+	levels[7].loadTexture(levelTexts);
 
 }
 //0 is score, 1 is health, 2 is slow fall, 3 is fall damage, 4, is win, 5 is lose
@@ -133,6 +132,7 @@ void Game::initSounds()
 void Game::runMainMenu()
 {
 	int choice = NULL;
+	int soundChoice = NULL;
 	choice = menu.startMenu();
 	switch (choice)
 	{
@@ -140,8 +140,31 @@ void Game::runMainMenu()
 		runLevelMenu();
 		choice = 0;
 		break;
-	case 2:
-		//settings will allow turning off of music
+	case 2: //setting menu compact enough to run within main Menu
+		soundChoice = menu.settingsMenu();
+		switch (soundChoice)
+		{
+		case 19:
+			updateSoundVolume(0);
+			break;
+		case 20:
+			updateSoundVolume(25);
+			break;
+		case 21:
+			updateSoundVolume(50);
+			break;
+		case 22:
+			updateSoundVolume(75);
+			break;
+		case 23:
+			updateSoundVolume(100);
+			break;
+		case 24:
+			runMainMenu();
+			break;
+		default:
+			break;
+		}
 		choice = 0;
 		break;
 	case 3:
@@ -185,7 +208,9 @@ void Game::runWonMenu()
 	delay(500);
 	
 	resetLevels();
-	menu.unlockLevel(currentLevel + 1); 
+	
+	if (!menu.isUnlocked(currentLevel + 1))
+		menu.unlockLevel(currentLevel + 1); 
 	
 	int choice = menu.wonMenu();
 	switch (choice)
@@ -193,7 +218,6 @@ void Game::runWonMenu()
 	case 7: //play next level
 		window.clear();
 		currentLevel++;
-		choice = 0;
 		playLevel(currentLevel); 
 		break;
 	case 8: //return to main menu
@@ -220,8 +244,8 @@ void Game::runLevelMenu()
 		runMainMenu();
 	else if (menu.isUnlocked(levelChoice - 9))
 	{
-		playLevel(levelChoice - 9);
 		currentLevel = levelChoice - 9;
+		playLevel(levelChoice - 9);
 	}
 }
 
@@ -372,7 +396,7 @@ void Game::itemCollision(Level& level, int levNum)
 		case 3:
 			sounds.at(3).play();
 			sf::sleep(soundDelay);
-			level.changeScrollSpeed(level.getScrollSpeed() + .025);
+			level.slowItemEffect();
 			break;
 		case 4:
 			sounds.at(4).play();
@@ -463,6 +487,10 @@ void Game::resetLevels()
 	resetLevel(2);
 	resetLevel(3);
 	resetLevel(4);
+	resetLevel(5);
+	resetLevel(6);
+	resetLevel(7);
+	resetLevel(8);
 }
 
 //takes into account completion time and health to assign score
@@ -518,6 +546,7 @@ void Game::updateLevelScores()
 
 	}
 	gameClock.restart();
+	
 	//include health as part of calculation
 	switch (player.getHealth())
 	{
@@ -589,6 +618,15 @@ void Game::convertLevelScores()
 	menu.loadScores(scoreStarsArr);
 }
 
+
+void Game::updateSoundVolume(int inp)
+{
+	for (int x = 0; x < sounds.size(); x++)
+		sounds.at(x).setVolume(inp);
+
+}
+
+//Utility Delay Function
 void Game::delay(int inp)
 {
 	clock_t time1 = clock();

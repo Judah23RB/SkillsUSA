@@ -69,5 +69,7 @@ private:
 	void updateLevelScores();
 	void convertLevelScores();
 
+	void updateSoundVolume(int);
+
 	void delay(int);
 };
