@@ -70,7 +70,6 @@ Level::~Level()
 
 void Level::initLevel()
 {
-	std::cout << "PLEASE GOD WORK" << std::endl;
 	leveldata = new Platforms[platNum];
 	
 	for (int x = 0; x < platNum; x++)
@@ -196,13 +195,15 @@ bool Level::itemCollision(sf::FloatRect p, int& itemType)
 
 void Level::scrollLevel(sf::RenderWindow &w)
 {
-	levelProgression();
-	
-	if (slowItem)
+	if (!slowItem)
+		levelProgression();
+	else
 	{
 		scrollSpeed += .1;
 		slowItem = false;
 	}
+	
+	
 	
 	for (int x = 0; x < platNum; x++)
 		leveldata[x].scroll(scrollSpeed);

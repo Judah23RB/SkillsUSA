@@ -17,17 +17,17 @@ public:
 	//menus
 	int startMenu();
 	int levelMenu();
-	int settingsMenu();
 	int wonMenu();
 	int lostMenu();
 	
 	//textures
 	void loadBackground(sf::Sprite&);
 	void loadScoreSheet(sf::Texture*);
+	void loadSoundSprites(sf::Texture*);
 
 	
 	//Animations
-	void startAnimation();
+	
 	void gameOverAnimation(bool); //won or lost
 	
 	//levels Menu
@@ -41,21 +41,20 @@ public:
 private:
 	std::vector<Button> buttons;
 	bool unlocked[8] = { true,false,false,false,false,false,false,false };
+	bool isMuted = false;;
 	int scores[8] = { 0,0,0,0,0,0,0,0 }; //compared to and updated by load scores
 	sf::RenderWindow* screen = nullptr;
 	sf::Font font;
 	sf::Text title, win, lose, settings;
 	sf::Sprite* background = nullptr;
-	sf::Sprite scoreStars;
+	sf::Sprite scoreStars, muted, unmuted;
 
 	bool mainMenu = false; //used for displaying title
 	bool levMenu = false; //used for displaying level scores
-	bool settingMenu = false; //used for settings text
 
 	int inputs();
 	void startOptions();
 	void levelOptions();
-	void settingsOptions();
 	void wonOptions();
 	void lostOptions();
 };

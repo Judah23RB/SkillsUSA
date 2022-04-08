@@ -34,7 +34,7 @@ private:
 	
 	sf::RenderWindow window;
 	sf::Font font;
-	sf::Texture platTextSheet, background, playerTexts, itemSheet, healthSheet, scoreSheet;
+	sf::Texture platTextSheet, background, playerTexts, itemSheet, healthSheet, scoreSheet, soundSprites;
 	sf::Image playerImage;
 	sf::Sprite backgroundImage, health, scores;
 	sf::Text win, lose;

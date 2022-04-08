@@ -37,6 +37,24 @@ void Menu::loadScoreSheet(sf::Texture* textptr)
 	scoreStars.setTexture(*textptr);
 	scoreStars.setScale(2, 2);
 }
+
+void Menu::loadSoundSprites(sf::Texture* soundTexts)
+{
+	sf::IntRect mute(6, 7, 17, 15);
+	sf::IntRect unMute(36, 7, 18, 15);
+
+	muted.setTexture(*soundTexts);
+	unmuted.setTexture(*soundTexts);
+	muted.setTextureRect(mute);
+	unmuted.setTextureRect(unMute);
+
+	muted.setPosition(0, 0);
+	unmuted.setPosition(60, 0);
+
+	muted.setScale(2, 2);
+	unmuted.setScale(2, 2);
+	
+}
 Menu::~Menu()
 {
 
@@ -46,7 +64,6 @@ int Menu::startMenu()
 {
 	mainMenu = true;
 	levMenu = false;
-	settingMenu = false;
 	buttons.clear();
 	screen->clear();
 	startOptions();
@@ -57,19 +74,8 @@ int Menu::levelMenu()
 {
 	levMenu = true;
 	mainMenu = false;
-	settingMenu = true;
 	screen->clear();
 	levelOptions();
-	return inputs();
-}
-
-int Menu::settingsMenu()
-{
-	levMenu = false;
-	mainMenu = false;
-	settingMenu = true;
-	screen->clear();
-	settingsOptions();
 	return inputs();
 }
 
@@ -78,7 +84,6 @@ int Menu::wonMenu()
 {
 	mainMenu = false;
 	levMenu = false;
-	settingMenu = false;
 	screen->clear();
 	wonOptions();
 	return inputs();
@@ -88,7 +93,6 @@ int Menu::lostMenu()
 {
 	mainMenu = false;
 	levMenu = false;
-	settingMenu = false;
 	screen->clear();
 	lostOptions();
 	return inputs();
@@ -104,17 +108,19 @@ int Menu::inputs()
 	{
 		screen->draw(*background);
 		
-		if (mainMenu)
-			screen->draw(title);
-
 		if (levMenu)
 			displayScores();
 
-		if (settingMenu)
-			screen->draw(settings);
 		
 		for (auto i : buttons)
 			screen->draw(i);
+		
+		if (mainMenu)
+		{
+			screen->draw(title);
+			screen->draw(muted);
+			screen->draw(unmuted);
+		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
@@ -123,6 +129,11 @@ int Menu::inputs()
 				sf::FloatRect bounds = i.getBounds();
 				if (bounds.contains(sf::Vector2f(sf::Mouse::getPosition(*screen))))
 					input = i.getValue();
+				
+				if (input == 2);
+					isMuted = true;
+				if (input == 3)
+					isMuted = false;
 			}
 		}
 
@@ -146,18 +157,24 @@ void Menu::startOptions()
 	temp = Button("Play", 1, font);
 	temp.setPosition(100, screen->getSize().y * .25);
 	temp.setColor(sf::Color(128, 128, 128));
-	
 	buttons.push_back(temp);
 
-	temp = Button("Settings", 2, font);
+	temp = Button(" ", 2, font, sf::RectangleShape(sf::Vector2f(30, 30)));
+	temp.setPosition(0, 0);
+	temp.setColor(sf::Color(128, 128, 128));
+	buttons.push_back(temp);
+
+	temp = Button(" ", 3, font, sf::RectangleShape(sf::Vector2f(30,30)));
+	temp.setPosition(60, 0);
+	temp.setColor(sf::Color(128, 128, 128));
+	buttons.push_back(temp);
+	
+	temp = Button("Quit", 4, font);
 	temp.setPosition(100, screen->getSize().y * .5);
 	temp.setColor(sf::Color(128, 128, 128));
 	buttons.push_back(temp);
 
-	temp = Button("Quit", 3, font);
-	temp.setPosition(100, screen->getSize().y * .75);
-	temp.setColor(sf::Color(128, 128, 128));
-	buttons.push_back(temp);
+	
 }
 
 
@@ -286,44 +303,7 @@ void Menu::lostOptions()
 	buttons.push_back(temp);
 }
 
-void Menu::settingsOptions()
-{
-	settings.setFont(font);
-	settings.setCharacterSize(64);
-	settings.setString("SFX");
-	settings.setPosition(300, screen->getSize().y * .25);
-	
-	buttons.clear();
-	screen->clear();
 
-	Button temp("", 0, font);
-
-	temp = Button("0", 19, font);
-	temp.setPosition(100, screen->getSize().y * .5);
-	buttons.push_back(temp);
-
-	temp = Button("25", 20, font);
-	temp.setPosition(200, screen->getSize().y * .5);
-	buttons.push_back(temp);
-
-	temp = Button("50", 21, font);
-	temp.setPosition(300, screen->getSize().y * .5);
-	buttons.push_back(temp);
-
-	temp = Button("75", 22, font);
-	temp.setPosition(400, screen->getSize().y * .5);
-	buttons.push_back(temp);
-
-	temp = Button("100", 23, font);
-	temp.setPosition(500, screen->getSize().y * .5);
-	buttons.push_back(temp);
-
-	temp = Button("Back", 24, font, sf::RectangleShape(sf::Vector2f(80, 40)), 36);
-	temp.setPosition(0, 0);
-	buttons.push_back(temp);
-
-	
-}
 
 bool Menu::isUnlocked(int level)
 {

@@ -60,13 +60,20 @@ void Game::initTextures()
 	if (!scoreSheet.loadFromFile("Sprites/stars.png"))
 		std::cout << "Error loading score stars texture" << std::endl;
 
+	if (!soundSprites.loadFromFile("Sprites/Sound_Sprite.png"))
+		std::cout << "Error Loading sound Sprites texture" << std::endl;
+
 	playerImage.createMaskFromColor(sf::Color(255, 255, 255), 0); //needed to make texture background transparant
 
-
+	
 	backgroundImage.setTexture(background);
 	menu.loadBackground(backgroundImage);
-	sf::Texture* scoreTextPtr = &scoreSheet;
-	menu.loadScoreSheet(scoreTextPtr);
+	
+	sf::Texture* textPtr = &scoreSheet;
+	menu.loadScoreSheet(textPtr);
+
+	textPtr = &soundSprites;
+	menu.loadSoundSprites(textPtr);
 	
 	
 	//holds platforms
@@ -78,9 +85,9 @@ void Game::initTextures()
 	levelTexts.push_back(textureptr);
 	
 	//player
-	sf::Texture* playerTextureptr = &playerTexts;
+	textPtr = &playerTexts;
 	playerTexts.loadFromImage(playerImage);
-	player.setTexture(playerTextureptr);
+	player.setTexture(textPtr);
 
 	//health
 	health.setTexture(healthSheet);
@@ -140,34 +147,15 @@ void Game::runMainMenu()
 		runLevelMenu();
 		choice = 0;
 		break;
-	case 2: //setting menu compact enough to run within main Menu
-		soundChoice = menu.settingsMenu();
-		switch (soundChoice)
-		{
-		case 19:
-			updateSoundVolume(0);
-			break;
-		case 20:
-			updateSoundVolume(25);
-			break;
-		case 21:
-			updateSoundVolume(50);
-			break;
-		case 22:
-			updateSoundVolume(75);
-			break;
-		case 23:
-			updateSoundVolume(100);
-			break;
-		case 24:
-			runMainMenu();
-			break;
-		default:
-			break;
-		}
-		choice = 0;
+	case 2: 
+		updateSoundVolume(0);
+		runMainMenu();
 		break;
 	case 3:
+		updateSoundVolume(100);
+		runMainMenu();
+		break;
+	case 4:
 		window.close();
 		break;
 	default:
@@ -394,7 +382,7 @@ void Game::itemCollision(Level& level, int levNum)
 				player.updateHealth(1);
 			break;
 		case 3:
-			sounds.at(3).play();
+			sounds.at(2).play();
 			sf::sleep(soundDelay);
 			level.slowItemEffect();
 			break;

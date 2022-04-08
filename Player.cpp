@@ -86,6 +86,8 @@ void Player::horizMoveModifier(double modifier)
 		lMoveSpeed = -1;
 	}
 }
+
+
 void Player::move(const int x, const int y)
 {
 	//acceleration

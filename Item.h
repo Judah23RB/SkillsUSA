@@ -21,6 +21,6 @@ public:
 	void scroll(double);
 
 private:
-	int type = 0; //1 is health, 2 is slow, 3 is score
+	int type = 0; //1 is score, 2 is slow, 3 is health
 	sf::Sprite sprite;
 };
